@@ -77,9 +77,13 @@ const DrawerContent = (props, context) => {
 
   const menuItems=[
     {
-      value:'/dashboard',
+      primaryText: intl.formatMessage({id: '[active_campaign_name]'}),
+      primaryTogglesNestedList: true,
+    },
+    {
+      value:'/[active_campaign_name]',
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'dashboard'}),
+      primaryText: intl.formatMessage({id: 'campaign dashboard'}),
       leftIcon: <FontIcon className="material-icons" >dashboard</FontIcon>
     },
     
@@ -87,30 +91,23 @@ const DrawerContent = (props, context) => {
       visible: isAuthorised,
       primaryText: intl.formatMessage({id: 'Campaigns'}),
       primaryTogglesNestedList: true,
-      leftIcon: <FontIcon className="material-icons" >campaigns</FontIcon>,
       leftIcon: <FontIcon className="material-icons" >import_contacts</FontIcon>,
       nestedItems:[
         {
           value:'/recent',
           visible: isAuthorised,
           primaryText: intl.formatMessage({id: 'recent'}),
-          leftIcon: <FontIcon className="material-icons" >person</FontIcon>,
-          primaryText: intl.formatMessage({id: 'Recent'}),
           leftIcon: <FontIcon className="material-icons" >history</FontIcon>,
         },
         {
           value:'/archived',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'archived'}),
-          leftIcon: <FontIcon className="material-icons" >group</FontIcon>,
           primaryText: intl.formatMessage({id: 'Archived'}),
           leftIcon: <FontIcon className="material-icons" >archive</FontIcon>,
         },
         {
           value:'/add_new',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'add_new'}),
-          leftIcon: <FontIcon className="material-icons" >textsms</FontIcon>,
           primaryText: intl.formatMessage({id: 'New'}),
           leftIcon: <FontIcon className="material-icons" >addnew</FontIcon>,
         }
@@ -125,31 +122,23 @@ const DrawerContent = (props, context) => {
       visible: isAuthorised,
       primaryText: intl.formatMessage({id: 'Assets'}),
       primaryTogglesNestedList: true,
-      leftIcon: <FontIcon className="material-icons" >campaigns</FontIcon>,
       leftIcon: <FontIcon className="material-icons" >add_circle</FontIcon>,
       nestedItems:[
         {
-          value:'/chats',
           value:'/Encounters',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'private'}),
           primaryText: intl.formatMessage({id: 'Encounters'}),
           leftIcon: <FontIcon className="material-icons" >person</FontIcon>,
         },
         {
-          value:'/public_chats',
           value:'/NPCs',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'public'}),
           primaryText: intl.formatMessage({id: 'NPCs'}),
           leftIcon: <FontIcon className="material-icons" >group</FontIcon>,
         },
         {
-          value:'/predefined_chat_messages',
           value:'/locations',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'predefined_messages'}),
-          leftIcon: <FontIcon className="material-icons" >textsms</FontIcon>,
           primaryText: intl.formatMessage({id: 'Locations'}),
           leftIcon: <FontIcon className="material-icons" >explore</FontIcon>,
         }
@@ -159,29 +148,21 @@ const DrawerContent = (props, context) => {
       visible: isAuthorised,
       primaryText: intl.formatMessage({id: 'Widgets'}),
       primaryTogglesNestedList: true,
-      leftIcon: <FontIcon className="material-icons" >campaigns</FontIcon>,
       leftIcon: <FontIcon className="material-icons" >widgets</FontIcon>,
       nestedItems:[
         {
-          value:'/chats',
           value:'/generators',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'private'}),
-          leftIcon: <FontIcon className="material-icons" >person</FontIcon>,
           primaryText: intl.formatMessage({id: 'Generators'}),
           leftIcon: <FontIcon className="material-icons" >book</FontIcon>,
         },
         {
-          value:'/public_chats',
           value:'/organizers',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'public'}),
-          leftIcon: <FontIcon className="material-icons" >group</FontIcon>,
           primaryText: intl.formatMessage({id: 'Organizers'}),
           leftIcon: <FontIcon className="material-icons" >timeline</FontIcon>,
         },
         {
-          value:'/predefined_chat_messages',
           value:'/operators',
           visible: isAuthorised,
           primaryText: intl.formatMessage({id: 'predefined_messages'}),
@@ -191,6 +172,12 @@ const DrawerContent = (props, context) => {
           primaryText: intl.formatMessage({id: 'Operators'}),
           leftIcon: <FontIcon className="material-icons" >work</FontIcon>,
         },
+        {
+          value:'/boards',
+          visible: isAuthorised,
+          primaryText: intl.formatMessage({id: 'Boards'}),
+          leftIcon: <FontIcon className="material-icons" >box</FontIcon>,
+        }, 
         {
           value:'/other tools',
           visible: isAuthorised,
@@ -230,10 +217,74 @@ const DrawerContent = (props, context) => {
       divider:true,
       visible: isAuthorised,
     },
+    
     {
-      value:'/dashboard',
+      value:'/Campaign_settings',
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'dashboard'}),
+      primaryText: intl.formatMessage({id: 'Campaign Settings'}),
+      primaryTogglesNestedList: true,
+      leftIcon: <FontIcon className="material-icons" >settings</FontIcon>,
+
+    },
+    {
+      value:'/morestorage',
+      visible: isAuthorised,
+      primaryText: intl.formatMessage({id: '34 of 50 assets used'}),
+
+    },
+  ];
+
+  const handleSignOut = () =>{
+
+    firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/connections`).remove();
+    firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/notificationTokens/${messaging.token}`).remove();
+    firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/lastOnline`).set(firebase.database.ServerValue.TIMESTAMP);
+    firebaseApp.auth().signOut().then(()=>{
+      setDialogIsOpen('auth_menu', false);
+    });
+  };
+
+  const authItems=[
+    {
+      value:'/my_account',
+      primaryText: intl.formatMessage({id: 'my_account'}),
+      leftIcon: <FontIcon className="material-icons" >account_box</FontIcon>
+    },
+    {
+      primaryText: intl.formatMessage({id: 'App Settings'}),
+      primaryTogglesNestedList: true,
+      leftIcon: <FontIcon className="material-icons" >settings</FontIcon>,
+      nestedItems:[
+        {
+          primaryText: intl.formatMessage({id: 'theme'}),
+          secondaryText: intl.formatMessage({id: theme}),
+          primaryTogglesNestedList: true,
+          leftIcon: <FontIcon className="material-icons" >style</FontIcon>,
+          nestedItems: themeItems,
+        },
+        {
+          primaryText: intl.formatMessage({id: 'language'}),
+          secondaryText: intl.formatMessage({id: locale}),
+          primaryTogglesNestedList: true,
+          leftIcon: <FontIcon className="material-icons" >language</FontIcon>,
+          nestedItems: localeItems,
+        },
+        {
+          primaryText: intl.formatMessage({id: 'responsive'}),
+          leftIcon: <FontIcon className="material-icons" >chrome_reader_mode</FontIcon>,
+          rightToggle: <Toggle
+            toggled={responsiveDrawer.responsive}
+            onToggle={
+              () => {setResponsive(!responsiveDrawer.responsive)}
+            }
+          />,
+        },
+      ]
+    },
+    {
+      visible: isAuthorised, //In prod: isGranted('App Dashboard'),
+      value:'/dashboard',
+      primaryText: intl.formatMessage({id: 'App dashboard'}),
       leftIcon: <FontIcon className="material-icons" >dashboard</FontIcon>,
     },
     {
@@ -245,9 +296,8 @@ const DrawerContent = (props, context) => {
     },
     {
       value:'/about',
-      divider:true,
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'about'}),
+      primaryText: intl.formatMessage({id: 'About'}),
       leftIcon: <FontIcon className="material-icons" >info_outline</FontIcon>,
     },
     {
@@ -269,62 +319,6 @@ const DrawerContent = (props, context) => {
           leftIcon: <FontIcon className="material-icons" >account_box</FontIcon>,
         },
       ]
-    },
-    {
-      divider:true,
-      value:'/about',
-      visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'about'}),
-      leftIcon: <FontIcon className="material-icons" >info_outline</FontIcon>,
-    },
-    // for admin
-    // {
-    //   visible: isAuthorised, //In prod: isGranted('administration'),
-    //   primaryTogglesNestedList: true,
-    //   primaryText: intl.formatMessage({id: 'administration'}),
-    //   leftIcon: <FontIcon className="material-icons" >security</FontIcon>,
-    //   nestedItems:[
-    //     {
-    //       value:'/users',
-    //       visible: isAuthorised, //In prod: isGranted('read_users'),
-    //       primaryText: intl.formatMessage({id: 'users'}),
-    //       leftIcon: <FontIcon className="material-icons" >group</FontIcon>
-    //     },
-    //     {
-    //       value:'/roles',
-    //       visible: isGranted('read_roles'),
-    //       primaryText: intl.formatMessage({id: 'roles'}),
-    //       leftIcon: <FontIcon className="material-icons" >account_box</FontIcon>
-    //     },
-    //   ]
-    // },
-   
-    {
-      primaryText: intl.formatMessage({id: 'settings'}),
-      primaryTogglesNestedList: true,
-    },
-    {
-      value:'/morestorage',
-      visible: isAuthorised,
-      primaryText: intl.formatMessage({id: '34 of 50 assets used'}),
-    },
-  ];
-
-  const handleSignOut = () =>{
-
-    firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/connections`).remove();
-    firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/notificationTokens/${messaging.token}`).remove();
-    firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/lastOnline`).set(firebase.database.ServerValue.TIMESTAMP);
-    firebaseApp.auth().signOut().then(()=>{
-      setDialogIsOpen('auth_menu', false);
-    });
-  };
-
-  const authItems=[
-    {
-      value:'/my_account',
-      primaryText: intl.formatMessage({id: 'my_account'}),
-      leftIcon: <FontIcon className="material-icons" >account_box</FontIcon>
     },
     {
       value:'/signin',
