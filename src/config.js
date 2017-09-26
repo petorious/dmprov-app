@@ -2,12 +2,12 @@ import firebase from 'firebase';
 
 const config= {
   firebase_config: {
-    apiKey: "AIzaSyBQAmNJ2DbRyw8PqdmNWlePYtMP0hUcjpY",
-    authDomain: "react-most-wanted-3b1b2.firebaseapp.com",
-    databaseURL: "https://react-most-wanted-3b1b2.firebaseio.com",
-    projectId: "react-most-wanted-3b1b2",
-    storageBucket: "react-most-wanted-3b1b2.appspot.com",
-    messagingSenderId: "258373383650"
+    apiKey: "AIzaSyDWHwb236t0NzjIN3QOLhQMj346uw9d0gw",
+    authDomain: "dmprov-app.firebaseapp.com",
+    databaseURL: "https://dmprov-app.firebaseio.com",
+    projectId: "dmprov-app",
+    storageBucket: "dmprov-app.appspot.com",
+    messagingSenderId: "634669046793"
   },
   firebase_providers: [
     firebase.auth.GoogleAuthProvider,

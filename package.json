@@ -1,5 +1,5 @@
 {
-  "name": "react-most-wanted",
+  "name": "dmprov-app",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
@@ -15,6 +15,7 @@
     "firebaseui": "^2.3.0",
     "firekit": "^0.1.24",
     "github-markdown-css": "^2.8.0",
+    "glob": "^7.1.2",
     "immutable": "^3.8.1",
     "intl": "^1.2.5",
     "intl-locales-supported": "^1.0.0",
