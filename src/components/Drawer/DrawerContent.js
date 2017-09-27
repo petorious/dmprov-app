@@ -77,15 +77,12 @@ const DrawerContent = (props, context) => {
 
   const menuItems=[
     {
+      value:'/canvas',
+      visible: isAuthorised,
       primaryText: intl.formatMessage({id: '[active_campaign_name]'}),
       primaryTogglesNestedList: true,
     },
-    {
-      value:'/[active_campaign_name]',
-      visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'campaign dashboard'}),
-      leftIcon: <FontIcon className="material-icons" >dashboard</FontIcon>
-    },
+    
     
      {
       visible: isAuthorised,

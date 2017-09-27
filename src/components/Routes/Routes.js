@@ -24,6 +24,7 @@ const AsyncDashboard = MyLoadable({loader: () => import('../../containers/Dashbo
 const AsyncAbout = MyLoadable({loader: () => import('../../containers/About/About')});
 const AsyncPublicChats = MyLoadable({loader: () => import('../../containers/PublicChats/PublicChats')});
 const AsyncMyAccount = MyLoadable({loader: () => import('../../containers/MyAccount/MyAccount')});
+const AsyncCanvas = MyLoadable({loader: () => import('../../containers/Canvas/Canvas')});
 
 const AsyncPredefinedChatMessages = MyLoadable({loader: () => import('../../containers/PredefinedChatMessages/PredefinedChatMessages')});
 
@@ -53,6 +54,10 @@ const Routes = (props, context) => {
     <Switch >
       <RestrictedRoute type='private' path="/" exact component={AsyncDashboard} />
       <RestrictedRoute type='private' path="/dashboard" exact component={AsyncDashboard} />
+
+      <RestrictedRoute type='private' path="/" exact component={AsyncCanvas} />
+      <RestrictedRoute type='private' path="/canvas" exact component={AsyncCanvas} />
+
 
       <RestrictedRoute type='private' path="/loading" exact component={LoadingComponent} />
 

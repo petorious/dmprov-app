@@ -22,4 +22,4 @@ const ReactGridUpper = (props) => {
 
 }
 
-export default muiThemeable()(Scrollbar);
+export default muiThemeable()(ReactGridUpper);
