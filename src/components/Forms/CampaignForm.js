@@ -1,8 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
-import {Field, reduxForm, formValueSelector } from 'redux-form';
-import { TextField } from 'redux-form-material-ui';
+import {Field, reduxForm, formValueSelector, } from 'redux-form';
+import SuperSelectField from 'material-ui-superselectfield'
+
+import { TextField, SelectField } from 'redux-form-material-ui';
+import Toggle from 'material-ui/Toggle';
+import MenuItem from 'material-ui/MenuItem';
+import {List, ListItem } from 'material-ui/List';
+import Divider from 'material-ui/Divider';
 import {Avatar} from '../../containers/Avatar';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
@@ -82,11 +88,11 @@ class Form extends Component {
       <div>
         <div>
           <Field
-            name="name"
+            name="campaign_name"
             disabled={!initialized}
             component={TextField}
-            hintText={intl.formatMessage({id: 'name_hint'})}
-            floatingLabelText={intl.formatMessage({id: 'name_label'})}
+            hintText={intl.formatMessage({id: 'campaign_name_hint'})}
+            floatingLabelText={intl.formatMessage({id: 'campaign_label'})}
             ref="name"
             withRef
           />
@@ -94,11 +100,11 @@ class Form extends Component {
 
         <div>
           <Field
-            name="full_name"
+            name="campaign_short_description"
             disabled={!initialized}
             component={TextField}
-            hintText={intl.formatMessage({id: 'full_name_hint'})}
-            floatingLabelText={intl.formatMessage({id: 'full_name_label'})}
+            hintText={intl.formatMessage({id: 'campaign_slug_hint'})}
+            floatingLabelText={intl.formatMessage({id: 'campaign_slug_label'})}
             ref="full_name"
             withRef
           />
@@ -116,6 +122,17 @@ class Form extends Component {
           />
         </div>
 
+        <div>
+          <Field
+            name="player_count"
+            disabled={!initialized}
+            component={TextField}
+            hintText={intl.formatMessage({id: 'player_count_hint'})}
+            floatingLabelText={intl.formatMessage({id: 'player_count_label'})}
+            ref="player_count"
+            withRef
+          />
+        </div>
 
         <div>
           <Field
@@ -130,6 +147,72 @@ class Form extends Component {
             withRef
           />
         </div>
+        <div>
+          <SuperSelectField
+            name="system"
+            disabled={!initialized}
+            component={SuperSelectField}
+            hintText={intl.formatMessage({id: 'system_hint'})}
+            floatingLabelText={intl.formatMessage({id: 'system_label'})}
+            ref="system"
+            withRef
+          >
+          <MenuItem value={1} label="5e DnD" primaryText="5e DnD" />
+          <MenuItem value={2} label="3.5 DnD" primaryText="3.5e DnD" />
+          <MenuItem value={3} label="Pathfinder" primaryText="Pathfinder" />
+          <MenuItem value={4} label="Star Wars FFG" primaryText="Star Wars FFG" />
+          <MenuItem value={5} label="7e CoC" primaryText="7e CoC" />
+          <MenuItem value={5} label="7e Shadowrun" primaryText="7e Shadowrun" />
+          </SuperSelectField>
+        </div>
+        <div>
+          <SuperSelectField
+            name="genre"
+            disabled={!initialized}
+            component={SuperSelectField}
+            hintText={intl.formatMessage({id: 'genre_hint'})}
+            floatingLabelText={intl.formatMessage({id: 'genre_label'})}
+            ref="genre"
+            withRef
+          >
+          <MenuItem value={1} label="Fantasy" primaryText="Fantasy" />
+          <MenuItem value={2} label="Steampunk" primaryText="Steampunk" />
+          <MenuItem value={3} label="Cyberpunk" primaryText="Cyberpunk" />
+          <MenuItem value={4} label="Space" primaryText="Space" />
+          <MenuItem value={5} label="Modern" primaryText="Modern" />
+          <MenuItem value={5} label="Noir" primaryText="Noir" />
+          </SuperSelectField>
+        </div>
+        <div >
+        <ListItem
+          rightToggle={
+            <Toggle
+              toggled={false}
+              onToggle={()=>{this.handleToggle}}
+            />
+          }
+          primaryText={intl.formatMessage({id: 'link_widgets' })}
+          //secondaryText={val.description}
+        />
+        <Divider inset={true}/>
+      </div>
+      <div >
+        <ListItem
+          rightToggle={
+            <Toggle
+              toggled={true}
+              onToggle={()=>{this.handleToggle}}
+            />
+          }
+          primaryText={intl.formatMessage({id: 'link_tags' })}
+          //secondaryText={val.description}
+        />
+        <Divider inset={true}/>
+      </div>;
+
+
+
+
 
         <ImageCropDialog
           path={`campaigns/${uid}`}

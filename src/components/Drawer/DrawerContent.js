@@ -79,14 +79,14 @@ const DrawerContent = (props, context) => {
     {
       value:'/canvas',
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: '[active_campaign_name]'}),
+      primaryText: intl.formatMessage({id: 'active_campaign'}),
       primaryTogglesNestedList: true,
     },
     
     
      {
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'Campaigns'}),
+      primaryText: intl.formatMessage({id: 'campaigns'}),
       primaryTogglesNestedList: true,
       leftIcon: <FontIcon className="material-icons" >import_contacts</FontIcon>,
       nestedItems:[
@@ -97,15 +97,15 @@ const DrawerContent = (props, context) => {
           leftIcon: <FontIcon className="material-icons" >history</FontIcon>,
         },
         {
-          value:'/archived',
+          value:'/campaigns',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'Archived'}),
+          primaryText: intl.formatMessage({id: 'archive'}),
           leftIcon: <FontIcon className="material-icons" >archive</FontIcon>,
         },
         {
-          value:'/add_new',
+          value:'/campaigns/create',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'New'}),
+          primaryText: intl.formatMessage({id: 'new'}),
           leftIcon: <FontIcon className="material-icons" >addnew</FontIcon>,
         }
       ]
@@ -117,117 +117,236 @@ const DrawerContent = (props, context) => {
     },
     {
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'Assets'}),
+      primaryText: intl.formatMessage({id: 'assets'}),
       primaryTogglesNestedList: true,
       leftIcon: <FontIcon className="material-icons" >add_circle</FontIcon>,
       nestedItems:[
+
         {
-          value:'/Encounters',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'Encounters'}),
-          leftIcon: <FontIcon className="material-icons" >person</FontIcon>,
+          primaryText: intl.formatMessage({id: 'frequent'}),
+          leftIcon: <FontIcon className="material-icons" >history</FontIcon>,
         },
         {
-          value:'/NPCs',
+          value:'/archive/assets',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'NPCs'}),
-          leftIcon: <FontIcon className="material-icons" >group</FontIcon>,
+          primaryText: intl.formatMessage({id: 'archive'}),
+          leftIcon: <FontIcon className="material-icons" >archive</FontIcon>,
         },
         {
-          value:'/locations',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'Locations'}),
-          leftIcon: <FontIcon className="material-icons" >explore</FontIcon>,
-        }
+          primaryText: intl.formatMessage({id: 'type'}),
+          leftIcon: <FontIcon className="material-icons" >addnew</FontIcon>,
+          nestedItems:[
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'encounters'}),
+              leftIcon: <FontIcon className="material-icons" >person</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'NPCs'}),
+              leftIcon: <FontIcon className="material-icons" >group</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'locations'}),
+              leftIcon: <FontIcon className="material-icons" >explore</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'vehicles'}),
+              leftIcon: <FontIcon className="material-icons" >person</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'items'}),
+              leftIcon: <FontIcon className="material-icons" >group</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'organizations'}),
+              leftIcon: <FontIcon className="material-icons" >explore</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'puzzles_traps'}),
+              leftIcon: <FontIcon className="material-icons" >person</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'spells_powers'}),
+              leftIcon: <FontIcon className="material-icons" >group</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'conditions'}),
+              leftIcon: <FontIcon className="material-icons" >explore</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'notes'}),
+              leftIcon: <FontIcon className="material-icons" >explore</FontIcon>,
+            },     
+          ]
+        },
       ]
     },
     {
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'Widgets'}),
+      primaryText: intl.formatMessage({id: 'widgets'}),
       primaryTogglesNestedList: true,
       leftIcon: <FontIcon className="material-icons" >widgets</FontIcon>,
       nestedItems:[
         {
-          value:'/generators',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'Generators'}),
+          primaryText: intl.formatMessage({id: 'generators'}),
           leftIcon: <FontIcon className="material-icons" >book</FontIcon>,
+          nestedItems:[
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'ranfiltrator'}),
+              leftIcon: <FontIcon className="material-icons" >history</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'radient'}),
+              leftIcon: <FontIcon className="material-icons" >archive</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'weather'}),
+              leftIcon: <FontIcon className="material-icons" >archive</FontIcon>,
+            },
+          ]
         },
         {
-          value:'/organizers',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'Organizers'}),
-          leftIcon: <FontIcon className="material-icons" >timeline</FontIcon>,
-        },
-        {
-          value:'/operators',
-          visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'predefined_messages'}),
-          leftIcon: <FontIcon className="material-icons" >textsms</FontIcon>,
-        },
-        {
-          primaryText: intl.formatMessage({id: 'Operators'}),
+          primaryText: intl.formatMessage({id: 'operators'}),
           leftIcon: <FontIcon className="material-icons" >work</FontIcon>,
+          nestedItems:[
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'initiative_tracker'}),
+              leftIcon: <FontIcon className="material-icons" >history</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'dice_roller'}),
+              leftIcon: <FontIcon className="material-icons" >archive</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'combat_helper'}),
+              leftIcon: <FontIcon className="material-icons" >archive</FontIcon>,
+            },
+          ]
+        },
+        
+        {
+          primaryText: intl.formatMessage({id: 'reference'}),
+          leftIcon: <FontIcon className="material-icons" >book</FontIcon>,
         },
         {
           value:'/boards',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'Boards'}),
+          primaryText: intl.formatMessage({id: 'boards'}),
           leftIcon: <FontIcon className="material-icons" >box</FontIcon>,
+          nestedItems:[
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'kanban'}),
+              leftIcon: <FontIcon className="material-icons" >history</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'timeline'}),
+              leftIcon: <FontIcon className="material-icons" >timeline</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'map'}),
+              leftIcon: <FontIcon className="material-icons" >map</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'family_tree'}),
+              leftIcon: <FontIcon className="material-icons" >tree</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'heroes_cycle'}),
+              leftIcon: <FontIcon className="material-icons" >circle</FontIcon>,
+            },
+          ]
         }, 
         {
           value:'/other tools',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'Other Tools'}),
+          primaryText: intl.formatMessage({id: 'other_tools'}),
           leftIcon: <FontIcon className="material-icons" >build</FontIcon>,
+          nestedItems:[
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'messenger'}),
+              leftIcon: <FontIcon className="material-icons" >sms</FontIcon>,
+            },
+            {
+              visible: isAuthorised,
+              primaryText: intl.formatMessage({id: 'scheduler'}),
+              leftIcon: <FontIcon className="material-icons" >calendar</FontIcon>,
+            },
+          ]
+        }, 
+         {
+          value:'/widget/create',
+          visible: isAuthorised,
+          primaryText: intl.formatMessage({id: 'create'}),
+          leftIcon: <FontIcon className="material-icons" >add_circle</FontIcon>,
         }, 
       ]
     },
     {
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'Media'}),
+      primaryText: intl.formatMessage({id: 'media'}),
       primaryTogglesNestedList: true,
       leftIcon: <FontIcon className="material-icons" >perm_media</FontIcon>,
       nestedItems:[
         {
           value:'/images',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'Images'}),
+          primaryText: intl.formatMessage({id: 'images'}),
           leftIcon: <FontIcon className="material-icons" >image</FontIcon>,
         },
         {
           value:'/sounds',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'Sounds'}),
+          primaryText: intl.formatMessage({id: 'sounds'}),
           leftIcon: <FontIcon className="material-icons" >audiotrack</FontIcon>,
         },
         {
           value:'/other',
           visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'Other'}),
+          primaryText: intl.formatMessage({id: 'other'}),
           leftIcon: <FontIcon className="material-icons" >picture_as_pdf</FontIcon>,
         },
-             
       ]
     },
     {
       divider:true,
       visible: isAuthorised,
     },
-    
     {
       value:'/Campaign_settings',
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'Campaign Settings'}),
+      primaryText: intl.formatMessage({id: 'campaign_settings'}),
       primaryTogglesNestedList: true,
       leftIcon: <FontIcon className="material-icons" >settings</FontIcon>,
 
     },
     {
-      value:'/morestorage',
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: '34 of 50 assets used'}),
-
+      primaryText: intl.formatMessage({id: 'assets_used'}),
     },
   ];
 
@@ -248,7 +367,7 @@ const DrawerContent = (props, context) => {
       leftIcon: <FontIcon className="material-icons" >account_box</FontIcon>
     },
     {
-      primaryText: intl.formatMessage({id: 'App Settings'}),
+      primaryText: intl.formatMessage({id: 'app_settings'}),
       primaryTogglesNestedList: true,
       leftIcon: <FontIcon className="material-icons" >settings</FontIcon>,
       nestedItems:[
@@ -281,7 +400,7 @@ const DrawerContent = (props, context) => {
     {
       visible: isAuthorised, //In prod: isGranted('App Dashboard'),
       value:'/dashboard',
-      primaryText: intl.formatMessage({id: 'App dashboard'}),
+      primaryText: intl.formatMessage({id: 'app_dashboard'}),
       leftIcon: <FontIcon className="material-icons" >dashboard</FontIcon>,
     },
     {
@@ -294,7 +413,7 @@ const DrawerContent = (props, context) => {
     {
       value:'/about',
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'About'}),
+      primaryText: intl.formatMessage({id: 'about'}),
       leftIcon: <FontIcon className="material-icons" >info_outline</FontIcon>,
     },
     {
@@ -325,7 +444,6 @@ const DrawerContent = (props, context) => {
     },
 
   ];
-
 
   return (
     <div style={{

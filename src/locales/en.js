@@ -191,6 +191,19 @@ const messages=defineMessages({
   images: 'Images',
   sounds: 'Sounds',
   other: 'Other',
+  campaign_name: 'Campaign Name',
+  campaign_label: 'Campaign Name',
+  campaign_name_hint: 'Enter Campaign Name',
+  campaign_slug_hint: 'Enter Short Description',
+  campaign_slug_label: 'Short Description',
+  player_count_hint: ' Enter Expected Player Count',
+  player_count_label: 'Expected Player Count',
+  system_hint: 'System',
+  system_label: 'Enter Game System',
+  genre_hint: 'Genre',
+  genre_label: 'Enter Genre',
+  link_widgets: 'Link Widgets',
+  link_tags: 'Link Tags',
 });
 
 export default messages;

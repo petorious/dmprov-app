@@ -82,13 +82,15 @@ const Routes = (props, context) => {
       <RestrictedRoute type='private' path="/companies/edit/:uid" exact component={AsyncCompany} />
       <RestrictedRoute type='private' path="/companies/create" exact component={AsyncCompany} />
 
-      <RestrictedRoute type='private' path="/archive/assets" exact component={AsyncAssets} />
-      <RestrictedRoute type='private' path="/archive/assets/edit/:uid" exact component={AsyncAsset} />
-      <RestrictedRoute type='private' path="/archive/assets/create" exact component={AsyncAsset} />
+      <RestrictedRoute type='private' path="/assets" exact component={AsyncAssets} />
+      <RestrictedRoute type='private' path="/assets/edit/:uid" exact component={AsyncAsset} />
+      <RestrictedRoute type='private' path="/assets/create" exact component={AsyncAsset} />
 
-      <RestrictedRoute type='private' path="/archive/campaigns" exact component={AsyncCampaigns} />
-      <RestrictedRoute type='private' path="/archive/campaigns/edit/:uid" exact component={AsyncCampaign} />
-      <RestrictedRoute type='private' path="/archive/campaigns/create" exact component={AsyncCampaign} />
+      <RestrictedRoute type='private' path="/campaigns" exact component={AsyncCampaigns} />
+      <RestrictedRoute type='private' path="/campaigns/:uid" component={AsyncCampaign} />
+      <RestrictedRoute type='private' path="/campaigns/edit/:uid" exact component={AsyncCampaign} />
+
+      <RestrictedRoute type='private' path="/campaigns/create" exact component={AsyncCampaign} />
 
 
       <RestrictedRoute type='private' path="/predefined_chat_messages" exact component={AsyncPredefinedChatMessages} />
