@@ -39,6 +39,13 @@ const AsyncChat = MyLoadable({loader: () => import('../../containers/Chats/Chat'
 const AsyncCreateChat = MyLoadable({loader: () => import('../../containers/Chats/CreateChat')});
 const AsyncChats = MyLoadable({loader: () => import('../../containers/Chats/Chats')}, [AsyncChat, AsyncCreateChat]);
 
+const AsyncAsset = MyLoadable({loader: () => import('../../containers/ArchiveAssets/AAsset')});
+const AsyncAssets = MyLoadable({loader: () => import('../../containers/ArchiveAssets/AAssets')}, [AsyncAsset]);
+
+
+const AsyncCampaign = MyLoadable({loader: () => import('../../containers/ArchiveCampaigns/ACampaign')});
+const AsyncCampaigns = MyLoadable({loader: () => import('../../containers/ArchiveCampaigns/ACampaigns')}, [AsyncAsset]);
+
 const AsyncCompany = MyLoadable({loader: () => import('../../containers/Companies/Company')});
 const AsyncCompanies = MyLoadable({loader: () => import('../../containers/Companies/Companies')}, [AsyncCompany]);
 
@@ -74,6 +81,15 @@ const Routes = (props, context) => {
       <RestrictedRoute type='private' path="/companies" exact component={AsyncCompanies} />
       <RestrictedRoute type='private' path="/companies/edit/:uid" exact component={AsyncCompany} />
       <RestrictedRoute type='private' path="/companies/create" exact component={AsyncCompany} />
+
+      <RestrictedRoute type='private' path="/archive/assets" exact component={AsyncAssets} />
+      <RestrictedRoute type='private' path="/archive/assets/edit/:uid" exact component={AsyncAsset} />
+      <RestrictedRoute type='private' path="/archive/assets/create" exact component={AsyncAsset} />
+
+      <RestrictedRoute type='private' path="/archive/campaigns" exact component={AsyncCampaigns} />
+      <RestrictedRoute type='private' path="/archive/campaigns/edit/:uid" exact component={AsyncCampaign} />
+      <RestrictedRoute type='private' path="/archive/campaigns/create" exact component={AsyncCampaign} />
+
 
       <RestrictedRoute type='private' path="/predefined_chat_messages" exact component={AsyncPredefinedChatMessages} />
 

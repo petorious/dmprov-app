@@ -1,28 +1,33 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import { ReactGridLayout } from 'react-grid-layout';
+
 import {connect} from 'react-redux';
 import FlatButton from 'material-ui/FlatButton';
 import { injectIntl, intlShape } from 'react-intl';
 import { ReduxIcon } from '../../components/Icons';
 import { Activity } from '../../containers/Activity';
+import Canvas from '../../components/Canvas/Canvas';
 import muiThemeable from 'material-ui/styles/muiThemeable';
-import {Line, Bar, Doughnut} from 'react-chartjs-2';
 import { withFirebase } from 'firekit';
-import CountUp from 'react-countup';
 import FontIcon from 'material-ui/FontIcon';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import { onLayoutChange } from '../../store/grids/actions';
 
 
-class Canvas extends Component {
 
-  componentDidMount(){
-    const {  }=this.props;
+// class Canvas extends Component {
 
- 
-  }
+//   componentDidMount(){
+//     const {  }=this.props;
+//  }
+function mapStateToProps(state) {
 
-  render() {
+  const {muiTheme, intl, canvas, } = state;
 
-    const {muiTheme, intl, }= this.props;
+  // render() {
+
+  //   const {muiTheme, intl, }= this.props;
 
     return (
       <Activity
@@ -39,6 +44,12 @@ class Canvas extends Component {
         
         title={intl.formatMessage({id: 'canvas'})}>
         <div>
+        <div className="canvas">
+      
+          <ReactGridLayout  {...this.props.canvas}>
+          {/* this.props.children */}
+          </ReactGridLayout>
+        </div>
         <FloatingActionButton
           //onClick={()=>{history.push(`/chats/create`)}}
           style={{
@@ -61,19 +72,30 @@ class Canvas extends Component {
     );
   }
 
+
+
+// Canvas.propTypes = {
+//   intl: intlShape.isRequired,
+// };
+
+// const mapStateToProps = (state) => {
+//   const { paths } = state;
+
+//   return {
+    
+//   };
+// };
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+
+    onLayoutChange:(layout)=>{
+      dispatch(onLayoutChange(layout));
+    },
+
+  }
 }
 
-Canvas.propTypes = {
-  intl: intlShape.isRequired,
-};
-
-const mapStateToProps = (state) => {
-  const { paths } = state;
-
-  return {
-    
-  };
-};
 
 export default connect(
   mapStateToProps
