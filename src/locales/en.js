@@ -32,7 +32,7 @@ const messages=defineMessages({
   'link_with_facebook.com': 'Link with Facebook',
   'link_with_twitter.com': 'Link with Twitter',
   'link_with_github.com': 'Link with Github',
-  my_account: 'My account',
+  my_account: 'My Account',
   name: 'Name',
   email: 'E-Mail',
   password: 'Password',
@@ -153,7 +153,7 @@ const messages=defineMessages({
   campaign_settings:'Campaign Settings',
   assets_used: '0 of 0 used',
   active_campaign: 'active campaign',
-  app_settings:'App Settigns',
+  app_settings:'App Settings',
   app_dashboard:'App Dashboard',
   recent:'Recent',
   frequent:'Frequent',
@@ -204,6 +204,8 @@ const messages=defineMessages({
   genre_label: 'Enter Genre',
   link_widgets: 'Link Widgets',
   link_tags: 'Link Tags',
+  search: 'Search',
+  global_db: 'Global Data',
 });
 
 export default messages;

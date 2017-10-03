@@ -77,7 +77,7 @@ const DrawerContent = (props, context) => {
 
   const menuItems=[
     {
-      value:'/canvas',
+      value:'/campaigns',
       visible: isAuthorised,
       primaryText: intl.formatMessage({id: 'active_campaign'}),
       primaryTogglesNestedList: true,
@@ -128,7 +128,7 @@ const DrawerContent = (props, context) => {
           leftIcon: <FontIcon className="material-icons" >history</FontIcon>,
         },
         {
-          value:'/archive/assets',
+          value:'/assets',
           visible: isAuthorised,
           primaryText: intl.formatMessage({id: 'archive'}),
           leftIcon: <FontIcon className="material-icons" >archive</FontIcon>,
@@ -398,12 +398,6 @@ const DrawerContent = (props, context) => {
       ]
     },
     {
-      visible: isAuthorised, //In prod: isGranted('App Dashboard'),
-      value:'/dashboard',
-      primaryText: intl.formatMessage({id: 'app_dashboard'}),
-      leftIcon: <FontIcon className="material-icons" >dashboard</FontIcon>,
-    },
-    {
       visible: isAuthorised,
       primaryText: intl.formatMessage({id: 'chats'}),
       primaryTogglesNestedList: true,
@@ -429,10 +423,48 @@ const DrawerContent = (props, context) => {
           leftIcon: <FontIcon className="material-icons" >group</FontIcon>,
         },
         {
+          visible: isGranted, //In prod: isGranted('App Dashboard'),
+          value:'/dashboard',
+          primaryText: intl.formatMessage({id: 'app_dashboard'}),
+          leftIcon: <FontIcon className="material-icons" >dashboard</FontIcon>,
+        },
+        {
           value:'/roles',
           visible: isGranted('read_roles'),
           primaryText: intl.formatMessage({id: 'roles'}),
           leftIcon: <FontIcon className="material-icons" >account_box</FontIcon>,
+        },
+        {
+          visible: isGranted('read_roles'),
+          primaryText: intl.formatMessage({id: 'global_db'}),
+          leftIcon: <FontIcon className="material-icons" >storage</FontIcon>,
+          nestedItems:
+          [
+           {
+            value:'/global/campaigns',
+            visible: isGranted,
+            primaryText: intl.formatMessage({id: 'campaigns'}),
+            leftIcon: <FontIcon className="material-icons" >import_contacts</FontIcon>,
+           },
+           {
+            value:'/global/assets',
+            visible: isGranted,
+            primaryText: intl.formatMessage({id: 'assets'}),
+            leftIcon: <FontIcon className="material-icons" >add_circle</FontIcon>,
+           },
+           {
+            value:'/global/widgets',
+            visible: isGranted,
+            primaryText: intl.formatMessage({id: 'campaigns'}),
+            leftIcon: <FontIcon className="material-icons" >widgets</FontIcon>,
+           },
+           {
+            value:'/global/media',
+            visible: isGranted,
+            primaryText: intl.formatMessage({id: 'media'}),
+            leftIcon: <FontIcon className="material-icons" >perm_media</FontIcon>,
+           },
+          ]
         },
       ]
     },

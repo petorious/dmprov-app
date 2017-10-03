@@ -18,7 +18,6 @@ import { change, submit } from 'redux-form';
 import isGranted  from '../../utils/auth';
 
 
-
 const path='/campaigns/';
 const form_name='campaign';
 

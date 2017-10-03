@@ -89,7 +89,6 @@ class Form extends Component {
         <div>
           <Field
             name="campaign_name"
-            disabled={!initialized}
             component={TextField}
             hintText={intl.formatMessage({id: 'campaign_name_hint'})}
             floatingLabelText={intl.formatMessage({id: 'campaign_label'})}
@@ -101,7 +100,6 @@ class Form extends Component {
         <div>
           <Field
             name="campaign_short_description"
-            disabled={!initialized}
             component={TextField}
             hintText={intl.formatMessage({id: 'campaign_slug_hint'})}
             floatingLabelText={intl.formatMessage({id: 'campaign_slug_label'})}
@@ -113,7 +111,6 @@ class Form extends Component {
         <div>
           <Field
             name="vat"
-            disabled={!initialized}
             component={TextField}
             hintText={intl.formatMessage({id: 'vat_hint'})}
             floatingLabelText={intl.formatMessage({id: 'vat_label'})}
@@ -125,7 +122,6 @@ class Form extends Component {
         <div>
           <Field
             name="player_count"
-            disabled={!initialized}
             component={TextField}
             hintText={intl.formatMessage({id: 'player_count_hint'})}
             floatingLabelText={intl.formatMessage({id: 'player_count_label'})}
@@ -137,7 +133,6 @@ class Form extends Component {
         <div>
           <Field
             name="description"
-            disabled={!initialized}
             component={TextField}
             multiLine={true}
             rows={2}
@@ -150,7 +145,6 @@ class Form extends Component {
         <div>
           <SuperSelectField
             name="system"
-            disabled={!initialized}
             component={SuperSelectField}
             hintText={intl.formatMessage({id: 'system_hint'})}
             floatingLabelText={intl.formatMessage({id: 'system_label'})}
@@ -168,7 +162,6 @@ class Form extends Component {
         <div>
           <SuperSelectField
             name="genre"
-            disabled={!initialized}
             component={SuperSelectField}
             hintText={intl.formatMessage({id: 'genre_hint'})}
             floatingLabelText={intl.formatMessage({id: 'genre_label'})}
@@ -215,7 +208,7 @@ class Form extends Component {
 
 
         <ImageCropDialog
-          path={`campaigns/${uid}`}
+          path={`${uid}/campaigns/`}
           fileName={`photoURL`}
           onUploadSuccess={(s)=>{this.handlePhotoUploadSuccess(s) }}
           open={dialogs.new_campaign_photo!==undefined}

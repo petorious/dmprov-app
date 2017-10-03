@@ -15,42 +15,42 @@ import { withFirebase } from 'firekit';
 import isGranted  from '../../utils/auth';
 
 
-class Companies extends Component {
+class Campaigns extends Component {
 
   componentDidMount() {
     const { watchList, firebaseApp}=this.props;
 
-    let ref=firebaseApp.database().ref('companies').limitToFirst(20);
+    let ref=firebaseApp.database().ref('campaigns').limitToFirst(20);
 
     watchList(ref);
   }
 
-  renderList(companies) {
+  renderList(campaigns) {
     const {history} =this.props;
 
-    if(companies===undefined){
+    if(campaigns===undefined){
       return <div></div>
     }
 
-    return _.map(companies, (company, index) => {
+    return _.map(campaigns, (campaign, index) => {
 
       return <div key={index}>
         <ListItem
           leftAvatar={
             <Avatar
-              src={company.val.photoURL}
-              alt="bussines"
+              src={campaign.val.photoURL}
+              alt="arc"
               icon={
                 <FontIcon className="material-icons">
-                  business
+                  import_contacts
                 </FontIcon>
               }
             />
           }
           key={index}
-          primaryText={company.val.name}
-          secondaryText={company.val.full_name}
-          onClick={()=>{history.push(`/companies/edit/${company.key}`)}}
+          primaryText={campaign.val.campaign_name}
+          secondaryText={campaign.val.campaign_short_description}
+          onClick={()=>{history.push(`/campaigns/edit/${campaign.key}`)}}
           id={index}
         />
         <Divider inset={true}/>
@@ -60,26 +60,26 @@ class Companies extends Component {
 
 
   render(){
-    const { intl, companies, muiTheme, history, isGranted } =this.props;
+    const { intl, campaigns, muiTheme, history, isGranted } =this.props;
 
     return (
       <Activity
-        isLoading={companies===undefined}
+        isLoading={campaigns===undefined}
         containerStyle={{overflow:'hidden'}}
-        title={intl.formatMessage({id: 'companies'})}>
+        title={intl.formatMessage({id: 'campaigns'})}>
 
         <div id="scroller" style={{overflow: 'auto', height: '100%'}}>
 
           <div style={{overflow: 'none', backgroundColor: muiTheme.palette.convasColor}}>
             <List  id='test' style={{height: '100%'}} ref={(field) => { this.list = field; }}>
-              {this.renderList(companies)}
+              {this.renderList(campaigns)}
             </List>
           </div>
 
           <div style={{position: 'fixed', right: 18, zIndex:3, bottom: 18, }}>
           {
-              isGranted('create_company') &&
-              <FloatingActionButton secondary={true} onClick={()=>{history.push(`/companies/create`)}} style={{zIndex:3}}>
+              isGranted('create_campaign') &&
+              <FloatingActionButton secondary={true} onClick={()=>{history.push(`/campaigns/create`)}} style={{zIndex:3}}>
                 <FontIcon className="material-icons" >add</FontIcon>
               </FloatingActionButton>
           }
@@ -92,8 +92,8 @@ class Companies extends Component {
 
 }
 
-Companies.propTypes = {
-  companies: PropTypes.array.isRequired,
+Campaigns.propTypes = {
+  campaigns: PropTypes.array.isRequired,
   history: PropTypes.object,
   isGranted: PropTypes.func.isRequired,
 };
@@ -102,7 +102,7 @@ const mapStateToProps = (state) => {
   const { auth, browser, lists } = state;
 
   return {
-    companies: lists.companies,
+    campaigns: lists.campaigns,
     auth,
     browser,
     isGranted: grant=>isGranted(state, grant)
@@ -112,4 +112,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-)(injectIntl(muiThemeable()(withRouter(withFirebase(Companies)))));
+)(injectIntl(muiThemeable()(withRouter(withFirebase(Campaigns)))));

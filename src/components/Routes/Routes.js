@@ -24,10 +24,8 @@ const AsyncDashboard = MyLoadable({loader: () => import('../../containers/Dashbo
 const AsyncAbout = MyLoadable({loader: () => import('../../containers/About/About')});
 const AsyncPublicChats = MyLoadable({loader: () => import('../../containers/PublicChats/PublicChats')});
 const AsyncMyAccount = MyLoadable({loader: () => import('../../containers/MyAccount/MyAccount')});
-const AsyncCanvas = MyLoadable({loader: () => import('../../containers/Canvas/Canvas')});
 
 const AsyncPredefinedChatMessages = MyLoadable({loader: () => import('../../containers/PredefinedChatMessages/PredefinedChatMessages')});
-
 
 const AsyncTask = MyLoadable({loader: () => import('../../containers/Tasks/Task')});
 const AsyncTasks = MyLoadable({loader: () => import('../../containers/Tasks/Tasks')}, [AsyncTask]);
@@ -39,15 +37,11 @@ const AsyncChat = MyLoadable({loader: () => import('../../containers/Chats/Chat'
 const AsyncCreateChat = MyLoadable({loader: () => import('../../containers/Chats/CreateChat')});
 const AsyncChats = MyLoadable({loader: () => import('../../containers/Chats/Chats')}, [AsyncChat, AsyncCreateChat]);
 
-const AsyncAsset = MyLoadable({loader: () => import('../../containers/ArchiveAssets/AAsset')});
-const AsyncAssets = MyLoadable({loader: () => import('../../containers/ArchiveAssets/AAssets')}, [AsyncAsset]);
-
-
-const AsyncCampaign = MyLoadable({loader: () => import('../../containers/ArchiveCampaigns/ACampaign')});
-const AsyncCampaigns = MyLoadable({loader: () => import('../../containers/ArchiveCampaigns/ACampaigns')}, [AsyncAsset]);
-
 const AsyncCompany = MyLoadable({loader: () => import('../../containers/Companies/Company')});
 const AsyncCompanies = MyLoadable({loader: () => import('../../containers/Companies/Companies')}, [AsyncCompany]);
+
+const AsyncCampaign = MyLoadable({loader: () => import('../../containers/Campaigns/Campaign')});
+const AsyncCampaigns = MyLoadable({loader: () => import('../../containers/Campaigns/Campaigns')}, [AsyncCompany]);
 
 const AsyncUser = MyLoadable({loader: () => import('../../containers/Users/User')});
 const AsyncUsers = MyLoadable({loader: () => import('../../containers/Users/Users')}, [AsyncUser]);
@@ -62,12 +56,8 @@ const Routes = (props, context) => {
       <RestrictedRoute type='private' path="/" exact component={AsyncDashboard} />
       <RestrictedRoute type='private' path="/dashboard" exact component={AsyncDashboard} />
 
-      <RestrictedRoute type='private' path="/" exact component={AsyncCanvas} />
-      <RestrictedRoute type='private' path="/canvas" exact component={AsyncCanvas} />
-
-
+      
       <RestrictedRoute type='private' path="/loading" exact component={LoadingComponent} />
-
       <RestrictedRoute type='private' path="/public_chats" exact component={AsyncPublicChats} />
 
       <RestrictedRoute type='private' path="/tasks" exact component={AsyncTasks} />
@@ -82,16 +72,9 @@ const Routes = (props, context) => {
       <RestrictedRoute type='private' path="/companies/edit/:uid" exact component={AsyncCompany} />
       <RestrictedRoute type='private' path="/companies/create" exact component={AsyncCompany} />
 
-      <RestrictedRoute type='private' path="/assets" exact component={AsyncAssets} />
-      <RestrictedRoute type='private' path="/assets/edit/:uid" exact component={AsyncAsset} />
-      <RestrictedRoute type='private' path="/assets/create" exact component={AsyncAsset} />
-
       <RestrictedRoute type='private' path="/campaigns" exact component={AsyncCampaigns} />
-      <RestrictedRoute type='private' path="/campaigns/:uid" component={AsyncCampaign} />
       <RestrictedRoute type='private' path="/campaigns/edit/:uid" exact component={AsyncCampaign} />
-
       <RestrictedRoute type='private' path="/campaigns/create" exact component={AsyncCampaign} />
-
 
       <RestrictedRoute type='private' path="/predefined_chat_messages" exact component={AsyncPredefinedChatMessages} />
 
