@@ -206,6 +206,9 @@ const messages=defineMessages({
   link_tags: 'Link Tags',
   search: 'Search',
   global_db: 'Global Data',
+  create_asset: 'Create Asset',
+  globalize: 'Make Public',
+  
 });
 
 export default messages;

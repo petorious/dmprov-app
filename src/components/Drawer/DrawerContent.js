@@ -6,6 +6,8 @@ import Toggle from 'material-ui/Toggle';
 import allThemes from '../../themes';
 import allLocales from '../../locales';
 import firebase from 'firebase';
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
 import { injectIntl } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from 'firekit';
@@ -16,6 +18,7 @@ const DrawerContent = (props, context) => {
     responsiveDrawer,
     setResponsive,
     theme,
+    currentCampaignUid,
     locale,
     updateTheme,
     updateLocale,
@@ -30,6 +33,8 @@ const DrawerContent = (props, context) => {
     isGranted
   }=props;
 
+
+
   const isAuthorised = auth.isAuthorised;
 
   const handleChange = (event, index) => {
@@ -43,6 +48,24 @@ const DrawerContent = (props, context) => {
       history.push(index);
     }
   };
+// attempt at doing the campaign active name thing
+
+  const nameItem = (i, k) => {
+    const { list, intl, currentCampaignUid, muiTheme } = this.props;
+
+    const key=list[i].key;
+    const val=list[i].val;
+
+    return <div key={i}>
+      <ListItem
+        key={key}
+        id={key}
+        primaryText={val.campaign_name}
+      />
+      <Divider inset={true}/>
+    </div>;
+  }
+
 
   const themeItems = allThemes.map((t)=>{
     return {
@@ -74,17 +97,19 @@ const DrawerContent = (props, context) => {
   });
 
 
-
   const menuItems=[
-    {
-      value:'/campaigns',
+      
+
+
+    {  
+
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'active_campaign'}),
-      primaryTogglesNestedList: true,
-    },
+      primaryText: intl.formatMessage({id: 'currentCampaignUid'}),
+
+  
+    }, 
     
-    
-     {
+    {
       visible: isAuthorised,
       primaryText: intl.formatMessage({id: 'campaigns'}),
       primaryTogglesNestedList: true,
@@ -122,11 +147,7 @@ const DrawerContent = (props, context) => {
       leftIcon: <FontIcon className="material-icons" >add_circle</FontIcon>,
       nestedItems:[
 
-        {
-          visible: isAuthorised,
-          primaryText: intl.formatMessage({id: 'frequent'}),
-          leftIcon: <FontIcon className="material-icons" >history</FontIcon>,
-        },
+            
         {
           value:'/assets',
           visible: isAuthorised,
@@ -134,9 +155,15 @@ const DrawerContent = (props, context) => {
           leftIcon: <FontIcon className="material-icons" >archive</FontIcon>,
         },
         {
+          value:'/assets/create',
+          visible: isAuthorised,
+          primaryText: intl.formatMessage({id: 'new'}),
+          leftIcon: <FontIcon className="material-icons" >add</FontIcon>,
+        },
+        {
           visible: isAuthorised,
           primaryText: intl.formatMessage({id: 'type'}),
-          leftIcon: <FontIcon className="material-icons" >addnew</FontIcon>,
+          leftIcon: <FontIcon className="material-icons" >filter</FontIcon>,
           nestedItems:[
             {
               visible: isAuthorised,
@@ -482,6 +509,7 @@ const DrawerContent = (props, context) => {
       display: 'flex',
       flexDirection: 'column',
     }}>
+    
     <SelectableMenuList
       items={dialogs.auth_menu?authItems:menuItems}
       onIndexChange={handleChange}

@@ -7,7 +7,7 @@ import { Activity } from '../../containers/Activity';
 import { ResponsiveMenu } from 'material-ui-responsive-menu';
 import { FireForm } from 'firekit';
 import { setDialogIsOpen } from '../../store/dialogs/actions';
-import CampaignForm from '../../components/Forms/CampaignForm';
+import CompanyForm from '../../components/Forms/CompanyForm';
 import { withRouter } from 'react-router-dom';
 import firebase from 'firebase';
 import FontIcon from 'material-ui/FontIcon';
@@ -18,15 +18,12 @@ import { change, submit } from 'redux-form';
 import isGranted  from '../../utils/auth';
 
 
-const path='/campaigns/';
-const form_name='campaign';
+const path='/companies/';
+const form_name='company';
 
-class Campaign extends Component {
 
-  componentDidMount() {
-    this.props.watchList('users');
-  }
- 
+class Company extends Component {
+
   validate = (values) => {
     const { intl } = this.props;
     const errors = {}
@@ -36,9 +33,8 @@ class Campaign extends Component {
     errors.vat = !values.vat?intl.formatMessage({id: 'error_required_field'}):'';
 
     return errors
-  } 
- 
- 
+  }
+
   handleUpdateValues = (values) => {
 
     return {
@@ -47,36 +43,10 @@ class Campaign extends Component {
     }
   }
 
-  handleCreateValues = (values) => {
-    // var user = firebase.auth().currentUser;
-
-    // if (user != null) {
-    //   user.providerData.forEach(function (profile) {
-    //     console.log("Sign-in provider: "+profile.providerId);
-    //     console.log("  Provider-specific UID: "+profile.uid);
-    //     console.log("  Name: "+profile.displayName);
-    //     console.log("  Email: "+profile.email);
-    //     console.log("  Photo URL: "+profile.photoURL);
-    //   });
-    // }
-  
-    const {provider, firebaseApp, path, auth, uid}=this.props;
-    
-    return {
-
-      created: firebase.database.ServerValue.TIMESTAMP ,
-        userId: provider.uid,
-        // authorName: provider.displayName,
-        // authorUid: provider.uid,
-        // userName: provider.displayName,
-      ...values
-    }
-  }
-
   handleClose = () => {
     const { setDialogIsOpen }=this.props;
 
-    setDialogIsOpen('delete_campaign', false);
+    setDialogIsOpen('delete_company', false);
 
   }
 
@@ -129,14 +99,14 @@ class Campaign extends Component {
         text: intl.formatMessage({id: 'save'}),
         icon: <FontIcon className="material-icons" color={muiTheme.palette.canvasColor}>save</FontIcon>,
         tooltip:intl.formatMessage({id: 'save'}),
-        onClick: ()=>{submit('campaign')}
+        onClick: ()=>{submit('company')}
       },
       {
         hidden: uid===undefined || !isGranted(`delete_${form_name}`),
         text: intl.formatMessage({id: 'delete'}),
         icon: <FontIcon className="material-icons" color={muiTheme.palette.canvasColor}>delete</FontIcon>,
         tooltip: intl.formatMessage({id: 'delete'}),
-        onClick: ()=>{setDialogIsOpen('delete_campaign', true);}
+        onClick: ()=>{setDialogIsOpen('delete_company', true);}
       }
     ]
 
@@ -153,28 +123,27 @@ class Campaign extends Component {
         }
 
         onBackClick={()=>{history.goBack()}}
-        title={intl.formatMessage({id: match.params.uid?'edit_campaign':'create_campaign'})}>
+        title={intl.formatMessage({id: match.params.uid?'edit_company':'create_company'})}>
 
         <div style={{margin: 15, display: 'flex'}}>
 
           <FireForm
-            name={'campaign'}
+            name={'company'}
             path={`${path}`}
             validate={this.validate}
-            onSubmitSuccess={(values)=>{history.push('/campaigns');}}
-            onDelete={(values)=>{history.push('/campaigns');}}
-            handleCreateValues={this.handleCreateValues}
+            onSubmitSuccess={(values)=>{history.push('/companies');}}
+            onDelete={(values)=>{history.push('/companies');}}
             uid={match.params.uid}>
-            <CampaignForm />
+            <CompanyForm />
           </FireForm>
         </div>
         <Dialog
-          title={intl.formatMessage({id: 'delete_campaign_title'})}
+          title={intl.formatMessage({id: 'delete_company_title'})}
           actions={actions}
           modal={false}
-          open={dialogs.delete_campaign===true}
+          open={dialogs.delete_company===true}
           onRequestClose={this.handleClose}>
-          {intl.formatMessage({id: 'delete_campaign_message'})}
+          {intl.formatMessage({id: 'delete_company_message'})}
         </Dialog>
 
       </Activity>
@@ -182,7 +151,7 @@ class Campaign extends Component {
   }
 }
 
-Campaign.propTypes = {
+Company.propTypes = {
   history: PropTypes.object,
   intl: intlShape.isRequired,
   setDialogIsOpen: PropTypes.func.isRequired,
@@ -191,17 +160,14 @@ Campaign.propTypes = {
   submit: PropTypes.func.isRequired,
   muiTheme: PropTypes.object.isRequired,
   isGranted: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-
 };
 
 
 const mapStateToProps = (state) => {
-  const { intl, dialogs, auth } = state;
+  const { intl, dialogs } = state;
 
   return {
     intl,
-    auth,
     dialogs,
     isGranted: grant=>isGranted(state, grant)
   };
@@ -209,4 +175,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps, {setDialogIsOpen, change, submit}
-)(injectIntl(withRouter(withFirebase(muiThemeable()(Campaign)))));
+)(injectIntl(withRouter(withFirebase(muiThemeable()(Company)))));

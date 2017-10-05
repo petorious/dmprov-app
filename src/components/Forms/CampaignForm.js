@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
-import {Field, reduxForm, formValueSelector, } from 'redux-form';
-import SuperSelectField from 'material-ui-superselectfield'
-
-import { TextField, SelectField } from 'redux-form-material-ui';
+import {Field, reduxForm, formValueSelector, FieldArray, formValues, } from 'redux-form';
+import {SuperSelectField} from '../../containers/SuperSelectField';
+import firebase from 'firebase';
+import { TextField, } from 'redux-form-material-ui';
 import Toggle from 'material-ui/Toggle';
 import MenuItem from 'material-ui/MenuItem';
+import { setSimpleValue } from '../../store/simpleValues/actions';
 import {List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import {Avatar} from '../../containers/Avatar';
@@ -20,7 +21,7 @@ import PropTypes from 'prop-types';
 
 
 
-class Form extends Component {
+class CampaignForm extends Component {
 
   handlePhotoUploadSuccess = (snapshot) =>{
     const { setDialogIsOpen, change}=this.props;
@@ -28,17 +29,87 @@ class Form extends Component {
     setDialogIsOpen('new_campaign_photo', undefined);
   }
 
+  // handleCreateValues = (values) => {
+  //   const { auth, firebaseApp, path } = this.props
+  //   return {
+  //     created: firebase.database.ServerValue.TIMESTAMP ,
+  //     userName: auth.displayName,
+  //     userId: auth.uid,
+  //     completed: false,
+  //     ...values
+  //   }
+  // }
+
+  //handleToggle = (bool) => 
+
+
+  // handleItemClick = (val, key) => {
+  //   const { history, setPersistentValue, firebaseApp, auth } = this.props;
+
+  //   if(val.toggle=false){
+  //     firebaseApp.database().ref(`campaigns/${uid}`)val.false.remove();
+
+  //   }else{
+  //     firebaseApp.database().ref(`campaigns/${uid}`)val.true.push();
+
+  //     history.push(`/chats/edit/${key}`);
+  //   }
+  // } 
+  handleLinkTagsToggleChange = (e, i, isInputChecked, key) => {
+    const { firebaseApp, match } = this.props;
+    const uid=match.params.uid;
+
+    if(isInputChecked){
+      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).set(true);
+    }else{
+      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).remove();
+    }
+
+  }
+  handleLinkWidgetsToggleChange = (e, i, isInputChecked, key) => {
+    const { firebaseApp, match } = this.props;
+    const uid=match.params.uid;
+
+    if(isInputChecked){
+      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).set(true);
+    }else{
+      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).remove();
+    }
+
+  }
+
+  handleIsPublicToggleChange = (e, i, isInputChecked, key) => {
+    const { firebaseApp, match } = this.props;
+    const uid=match.params.uid;
+
+    if(isInputChecked){
+      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).set(true);
+    }else{
+      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).remove();
+    }
+
+  }
+
   render() {
     const{
       handleSubmit,
+      handleItemClick,
+      setPersistentValue,
       intl,
       initialized,
+      i,
       setDialogIsOpen,
       dialogs,
       match,
     } = this.props;
 
     const uid=match.params.uid;
+    let linkTags=[];
+    let linkWidgets=[];
+    let isPublic=[];
+    const key=i;
+    const val=[i];
+
 
     return (
       <form onSubmit={handleSubmit} style={{
@@ -67,7 +138,6 @@ class Form extends Component {
             withRef
           />
         </div>
-
 
         <FlatButton
           onClick={()=>{
@@ -120,88 +190,88 @@ class Form extends Component {
         </div>
 
         <div>
-          <Field
-            name="player_count"
-            component={TextField}
-            hintText={intl.formatMessage({id: 'player_count_hint'})}
-            floatingLabelText={intl.formatMessage({id: 'player_count_label'})}
-            ref="player_count"
-            withRef
-          />
-        </div>
+           <ListItem
+              primaryText={intl.formatMessage({id: 'player_count_hint'})}
+              disabled={true}/>
+           <Field
+              name="player_count"
+              elementHeight={60}
+              component={SuperSelectField}
+              hintText={intl.formatMessage({id: 'system_hint'})}
+              floatingLabelText={intl.formatMessage({id: 'system_label'})}
+              ref="system"
+              withRef
+            >
+            <MenuItem value={1} label="2" primaryText="2"/>
+            <MenuItem value={2} label="3" primaryText="3"/>
+            <MenuItem value={3} label="4" primaryText="4"/>
+            <MenuItem value={4} label="5" primaryText="5"/>
+            <MenuItem value={5} label="6" primaryText="6"/>
+            <MenuItem value={5} label="7" primaryText="7"/>
+            <MenuItem value={5} label="8" primaryText="8" />
+          
+           </Field>
+          </div>
 
         <div>
           <Field
-            name="description"
+            name="full_description"
             component={TextField}
             multiLine={true}
             rows={2}
-            hintText={intl.formatMessage({id: 'description_hint'})}
+            hintText={intl.formatMessage({id: 'full_description_hint'})}
             floatingLabelText={intl.formatMessage({id: 'description_label'})}
             ref="description"
             withRef
           />
         </div>
         <div>
-          <SuperSelectField
-            name="system"
-            component={SuperSelectField}
-            hintText={intl.formatMessage({id: 'system_hint'})}
-            floatingLabelText={intl.formatMessage({id: 'system_label'})}
-            ref="system"
-            withRef
-          >
-          <MenuItem value={1} label="5e DnD" primaryText="5e DnD" />
-          <MenuItem value={2} label="3.5 DnD" primaryText="3.5e DnD" />
-          <MenuItem value={3} label="Pathfinder" primaryText="Pathfinder" />
-          <MenuItem value={4} label="Star Wars FFG" primaryText="Star Wars FFG" />
-          <MenuItem value={5} label="7e CoC" primaryText="7e CoC" />
-          <MenuItem value={5} label="7e Shadowrun" primaryText="7e Shadowrun" />
-          </SuperSelectField>
-        </div>
-        <div>
-          <SuperSelectField
-            name="genre"
-            component={SuperSelectField}
-            hintText={intl.formatMessage({id: 'genre_hint'})}
-            floatingLabelText={intl.formatMessage({id: 'genre_label'})}
-            ref="genre"
-            withRef
-          >
-          <MenuItem value={1} label="Fantasy" primaryText="Fantasy" />
-          <MenuItem value={2} label="Steampunk" primaryText="Steampunk" />
-          <MenuItem value={3} label="Cyberpunk" primaryText="Cyberpunk" />
-          <MenuItem value={4} label="Space" primaryText="Space" />
-          <MenuItem value={5} label="Modern" primaryText="Modern" />
-          <MenuItem value={5} label="Noir" primaryText="Noir" />
-          </SuperSelectField>
-        </div>
-        <div >
-        <ListItem
-          rightToggle={
-            <Toggle
-              toggled={false}
-              onToggle={()=>{this.handleToggle}}
-            />
-          }
-          primaryText={intl.formatMessage({id: 'link_widgets' })}
-          //secondaryText={val.description}
-        />
-        <Divider inset={true}/>
-      </div>
-      <div >
-        <ListItem
-          rightToggle={
-            <Toggle
-              toggled={true}
-              onToggle={()=>{this.handleToggle}}
-            />
-          }
-          primaryText={intl.formatMessage({id: 'link_tags' })}
-          //secondaryText={val.description}
-        />
-        <Divider inset={true}/>
-      </div>;
+           <ListItem
+              primaryText={intl.formatMessage({id: 'system_hint'})}
+              disabled={true}/>
+           <Field
+              name="system"
+              elementHeight={60}
+              component={SuperSelectField}
+              hintText={intl.formatMessage({id: 'system_hint'})}
+              floatingLabelText={intl.formatMessage({id: 'system_label'})}
+              ref="system"
+              withRef
+            >
+            <MenuItem value={1} label="5e DnD" primaryText="5e DnD" 
+                  />
+            <MenuItem value={2} label="3.5 DnD" primaryText="3.5e DnD" 
+                  />
+            <MenuItem value={3} label="Pathfinder" primaryText="Pathfinder" 
+                  />
+            <MenuItem value={4} label="Star Wars FFG" primaryText="Star Wars FFG" 
+                  />
+            <MenuItem value={5} label="7e CoC" primaryText="7e CoC"
+                  />
+            <MenuItem value={5} label="7e Shadowrun" primaryText="7e Shadowrun" />
+            </Field>
+          </div>
+          <div>
+           <ListItem
+              primaryText={intl.formatMessage({id: 'genre_hint'})}
+              disabled={true}/>
+          
+            <Field
+              name="genre"
+              component={SuperSelectField}
+              hintText={intl.formatMessage({id: 'genre_hint'})}
+              floatingLabelText={intl.formatMessage({id: 'genre_label'})}
+              ref="genre"
+              withRef
+            >
+            <MenuItem value={1} label="Fantasy" primaryText="Fantasy" />
+            <MenuItem value={2} label="Steampunk" primaryText="Steampunk" />
+            <MenuItem value={3} label="Cyberpunk" primaryText="Cyberpunk" />
+            <MenuItem value={4} label="Space" primaryText="Space" />
+            <MenuItem value={5} label="Modern" primaryText="Modern" />
+            <MenuItem value={5} label="Noir" primaryText="Noir" />
+            </Field>
+          </div>
 
 
 
@@ -223,31 +293,35 @@ class Form extends Component {
 }
 }
 
-Form.propTypes = {
+CampaignForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   initialized: PropTypes.bool.isRequired,
   setDialogIsOpen: PropTypes.func.isRequired,
   dialogs: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 
 
-Form=reduxForm({form: 'campaign'})(Form);
+CampaignForm=reduxForm({form: 'campaign'})(CampaignForm);
 const selector = formValueSelector('campaign')
 
-const mapStateToProps = state => {
-  const { intl, vehicleTypes, users, dialogs } = state;
+const mapStateToProps = (state, ownProps) => {
+  const { lists, auth, browser, simpleValues, intl, vehicleTypes, users, dialogs, } = state;
+  const { uid } = ownProps;
 
   return {
     intl,
     vehicleTypes,
     users,
     dialogs,
+    uid,
     photoURL: selector(state, 'photoURL')
   };
 };
 
 export default connect(
   mapStateToProps, { setDialogIsOpen }
-)(injectIntl(withRouter(muiThemeable()(Form))));
+)(injectIntl(withRouter(muiThemeable()(CampaignForm))));

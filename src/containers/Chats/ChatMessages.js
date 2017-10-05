@@ -94,9 +94,9 @@ class ChatMessages extends Component {
 
     const newMessage = {
       created: firebase.database.ServerValue.TIMESTAMP,
-      authorName: auth.displayName,
-      authorUid: auth.uid,
-      authorPhotoUrl: auth.photoURL,
+      // authorName: auth.displayName,
+      // authorUid: auth.uid,
+      // authorPhotoUrl: auth.photoURL,
     }
 
     if (type === 'image') {
@@ -472,9 +472,9 @@ ChatMessages.propTypes = {
   auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state, ownPops) => {
+const mapStateToProps = (state, ownProps) => {
   const { lists, auth, browser, simpleValues } = state;
-  const { uid } = ownPops;
+  const { uid } = ownProps;
 
   const path=`user_chat_messages/${auth.uid}/${uid}`
   const chatMessageMenuOpen = simpleValues['chatMessageMenuOpen']===true

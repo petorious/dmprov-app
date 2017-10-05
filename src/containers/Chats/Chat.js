@@ -62,9 +62,9 @@ Chat.propTypes = {
   auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state, ownPops) => {
+const mapStateToProps = (state, ownProps) => {
   const { lists, auth } = state;
-  const { match } = ownPops;
+  const { match } = ownProps;
   const uid=match.params.uid;
 
   const path=`user_chat_messages/${auth.uid}/${uid}`;

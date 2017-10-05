@@ -41,7 +41,14 @@ const AsyncCompany = MyLoadable({loader: () => import('../../containers/Companie
 const AsyncCompanies = MyLoadable({loader: () => import('../../containers/Companies/Companies')}, [AsyncCompany]);
 
 const AsyncCampaign = MyLoadable({loader: () => import('../../containers/Campaigns/Campaign')});
-const AsyncCampaigns = MyLoadable({loader: () => import('../../containers/Campaigns/Campaigns')}, [AsyncCompany]);
+const AsyncCampaigns = MyLoadable({loader: () => import('../../containers/Campaigns/Campaigns')}, [AsyncCampaign]);
+
+const AsyncAsset = MyLoadable({loader: () => import('../../containers/Assets/Asset')});
+const AsyncAssets = MyLoadable({loader: () => import('../../containers/Assets/Assets')}, [AsyncAsset]);
+
+
+
+const AsyncCampaignPage= MyLoadable({loader: () => import('../../containers/Campaigns/CampaignPage')},);
 
 const AsyncUser = MyLoadable({loader: () => import('../../containers/Users/User')});
 const AsyncUsers = MyLoadable({loader: () => import('../../containers/Users/Users')}, [AsyncUser]);
@@ -75,6 +82,12 @@ const Routes = (props, context) => {
       <RestrictedRoute type='private' path="/campaigns" exact component={AsyncCampaigns} />
       <RestrictedRoute type='private' path="/campaigns/edit/:uid" exact component={AsyncCampaign} />
       <RestrictedRoute type='private' path="/campaigns/create" exact component={AsyncCampaign} />
+
+      <RestrictedRoute type='private' path="/assets" exact component={AsyncAssets} />
+      <RestrictedRoute type='private' path="/assets/edit/:uid" exact component={AsyncAsset} />
+      <RestrictedRoute type='private' path="/assets/create" exact component={AsyncAsset} />
+
+      <RestrictedRoute type='private' path="/campaigns/:uid" exact component={AsyncCampaignPage} />
 
       <RestrictedRoute type='private' path="/predefined_chat_messages" exact component={AsyncPredefinedChatMessages} />
 
