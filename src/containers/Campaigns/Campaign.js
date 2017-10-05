@@ -60,14 +60,14 @@ class Campaign extends Component {
     //   });
     // }
   
-    const {provider, firebaseApp, path, auth, uid}=this.props;
+    const { firebaseApp, path, auth, uid}=this.props;
     
     return {
 
       created: firebase.database.ServerValue.TIMESTAMP ,
-        userId: provider.uid,
+        userId: auth.uid,
         // authorName: provider.displayName,
-        // authorUid: provider.uid,
+        authorUid: auth.uid,
         // userName: provider.displayName,
       ...values
     }

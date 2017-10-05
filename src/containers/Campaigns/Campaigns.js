@@ -125,6 +125,7 @@ Campaigns.propTypes = {
   campaigns: PropTypes.array.isRequired,
   history: PropTypes.object,
   isGranted: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {

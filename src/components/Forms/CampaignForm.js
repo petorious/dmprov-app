@@ -98,6 +98,7 @@ class CampaignForm extends Component {
       intl,
       initialized,
       i,
+      auth,
       setDialogIsOpen,
       dialogs,
       match,
@@ -197,9 +198,8 @@ class CampaignForm extends Component {
               name="player_count"
               elementHeight={60}
               component={SuperSelectField}
-              hintText={intl.formatMessage({id: 'system_hint'})}
-              floatingLabelText={intl.formatMessage({id: 'system_label'})}
-              ref="system"
+              hintText={intl.formatMessage({id: 'player_count'})}
+              ref="player_count"
               withRef
             >
             <MenuItem value={1} label="2" primaryText="2"/>
@@ -227,14 +227,12 @@ class CampaignForm extends Component {
         </div>
         <div>
            <ListItem
-              primaryText={intl.formatMessage({id: 'system_hint'})}
               disabled={true}/>
            <Field
               name="system"
               elementHeight={60}
               component={SuperSelectField}
               hintText={intl.formatMessage({id: 'system_hint'})}
-              floatingLabelText={intl.formatMessage({id: 'system_label'})}
               ref="system"
               withRef
             >
@@ -260,7 +258,6 @@ class CampaignForm extends Component {
               name="genre"
               component={SuperSelectField}
               hintText={intl.formatMessage({id: 'genre_hint'})}
-              floatingLabelText={intl.formatMessage({id: 'genre_label'})}
               ref="genre"
               withRef
             >
@@ -301,7 +298,8 @@ CampaignForm.propTypes = {
   dialogs: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   muiTheme: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired,
+  auth: PropTypes.object,
+  uid: PropTypes.string.isRequired,
 };
 
 
