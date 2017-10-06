@@ -31,9 +31,14 @@ class Campaign extends Component {
     const { intl } = this.props;
     const errors = {}
 
-    errors.name = !values.name?intl.formatMessage({id: 'error_required_field'}):'';
-    errors.full_name = !values.full_name?intl.formatMessage({id: 'error_required_field'}):'';
+    errors.capaign_name = !values.campaign_name?intl.formatMessage({id: 'error_required_field'}):'';
+    errors.campaign_short_description = !values.campaign_short_description?intl.formatMessage({id: 'error_required_field'}):'';
+    errors.campaign_full_description = !values.campaign_full_description?intl.formatMessage({id: 'error_required_field'}):'';
+    errors.system = !values.system?intl.formatMessage({id: 'error_required_field'}):'';
+    errors.player_count = !values.player_count?intl.formatMessage({id: 'error_required_field'}):'';
+    errors.tags = !values.tags?intl.formatMessage({id: 'error_required_field'}):'';
     errors.vat = !values.vat?intl.formatMessage({id: 'error_required_field'}):'';
+
 
     return errors
   } 

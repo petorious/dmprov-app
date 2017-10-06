@@ -208,7 +208,8 @@ const messages=defineMessages({
   global_db: 'Global Data',
   create_asset: 'Create Asset',
   globalize: 'Make Public',
-  
+  player_count: 'Players',
+  full_description_hint: 'Full Description',
 });
 
 export default messages;

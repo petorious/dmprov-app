@@ -163,7 +163,7 @@ class CampaignForm extends Component {
             component={TextField}
             hintText={intl.formatMessage({id: 'campaign_name_hint'})}
             floatingLabelText={intl.formatMessage({id: 'campaign_label'})}
-            ref="name"
+            ref="campaign_name"
             withRef
           />
         </div>
@@ -174,7 +174,7 @@ class CampaignForm extends Component {
             component={TextField}
             hintText={intl.formatMessage({id: 'campaign_slug_hint'})}
             floatingLabelText={intl.formatMessage({id: 'campaign_slug_label'})}
-            ref="full_name"
+            ref="campaign_short_description"
             withRef
           />
         </div>
@@ -192,7 +192,6 @@ class CampaignForm extends Component {
 
         <div>
            <ListItem
-              primaryText={intl.formatMessage({id: 'player_count_hint'})}
               disabled={true}/>
            <Field
               name="player_count"
@@ -221,7 +220,7 @@ class CampaignForm extends Component {
             rows={2}
             hintText={intl.formatMessage({id: 'full_description_hint'})}
             floatingLabelText={intl.formatMessage({id: 'description_label'})}
-            ref="description"
+            ref="full_description"
             withRef
           />
         </div>
@@ -251,7 +250,6 @@ class CampaignForm extends Component {
           </div>
           <div>
            <ListItem
-              primaryText={intl.formatMessage({id: 'genre_hint'})}
               disabled={true}/>
           
             <Field

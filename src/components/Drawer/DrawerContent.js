@@ -104,7 +104,7 @@ const DrawerContent = (props, context) => {
     {  
 
       visible: isAuthorised,
-      primaryText: intl.formatMessage({id: 'currentCampaignUid'}),
+      primaryText: intl.formatMessage({id: 'active_campaign'}),
 
   
     }, 
