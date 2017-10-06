@@ -25,7 +25,10 @@ class Campaigns extends Component {
   componentDidMount() {
     const { watchList, firebaseApp}=this.props;
 
-    let ref=firebaseApp.database().ref('campaigns').limitToFirst(20);
+    let ref=firebaseApp.database().ref('campaigns')
+    .orderByChild('authorUid')
+    .equalTo('rJExILsTwDhC2mX28rpQ1MhpXfO2')
+    .limitToFirst(20);
 
     watchList(ref);
   }
