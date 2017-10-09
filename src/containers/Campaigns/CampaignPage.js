@@ -4,27 +4,64 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setSimpleValue } from '../../store/simpleValues/actions';
 import { setPersistentValue } from '../../store/persistentValues/actions';
+import {Responsive, WidthProvider} from 'react-grid-layout';
 import { onLayoutChange } from '../../store/grids/actions';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import { injectIntl } from 'react-intl';
 import { Activity } from '../../containers/Activity';
 import {List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import FontIcon from 'material-ui/FontIcon';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import {withRouter} from 'react-router-dom';
-import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
 import { withFirebase } from 'firekit';
 import { Tabs, Tab } from 'material-ui/Tabs'
 import Scrollbar from '../../components/Scrollbar/Scrollbar'
 import { filterSelectors, filterActions } from 'material-ui-filter'
 import isGranted  from '../../utils/auth';
+import FontIcon from 'material-ui/FontIcon';
+import FlatButton from 'material-ui/FlatButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
+import {GridList, GridTile} from 'material-ui/GridList';
+import Subheader from 'material-ui/Subheader';
+import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 
 //attempt at doing the campaign page path campaign name thing 
-const path='/campaigns'
+const path='/campaigns';
 
-const tabPath = '/campaign_tabs'
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
+
+
+const tabPath = '/campaign_tabs';
+
+
+const styles = {
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+  },
+  gridList: {
+    width: 500,
+    height: 500,
+    overflowY: 'auto',
+    marginBottom: 24,
+  },
+  paper:{
+    height: 100,
+    width: 100,
+    margin: 5,
+    textAlign: 'center',
+    display: 'inline-block',
+  }
+};
+let layoutToSave=undefined;
+
 
 class CampaignPage extends Component {
 
@@ -54,7 +91,7 @@ class CampaignPage extends Component {
 
   // }
 
- 
+ //renderGrid(assets)
 
 
   renderList(assets) {
@@ -96,7 +133,23 @@ class CampaignPage extends Component {
 
 
   render(){
-    const { intl, assets, muiTheme, history, isGranted, campaignDisplayName, currentCampaignUid, uid } =this.props;
+    const { intl, browser, assets, muiTheme, history, reactGridLayout, onLayoutChange, isGranted, campaignDisplayName, currentCampaignUid, uid } =this.props;
+
+    function handleLayoutChange(layout){
+      layoutToSave=layout;
+    };
+
+
+    var layout = [
+      {i: '1', x: 0, y: 0, w: 4, h: 4.2,isResizable:false},
+      {i: '2', x: 6, y: 0, w: 3, h: 1},
+      {i: '3', x: 4, y: 0, w: 3, h: 3},
+      {i: '4', x: 4, y: 0, w: 3, h: 2}
+    ];
+
+
+    var layouts = reactGridLayout //.layout?{lg:reactGridLayout.layout}:{lg:layout};
+
 
     return (
       <Activity
@@ -112,9 +165,78 @@ class CampaignPage extends Component {
              // value={'1'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
                <div style={{overflow: 'none', backgroundColor: muiTheme.palette.convasColor}}>
-                 <List  id='test' style={{height: '100%'}} ref={(field) => { this.list = field; }}>
-                    {this.renderList(assets)}
-                </List>
+                <ResponsiveReactGridLayout
+                            isDraggable={browser.greaterThan.medium}
+                            isResizable={browser.greaterThan.medium}
+                            onLayoutChange={handleLayoutChange}
+                            className="layout"
+                            layouts={layouts}
+                            autoSize={true}
+                            breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
+                            cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
+                            ref="grid"
+                            >
+
+                            <Card key={"1"}>
+                              <CardHeader
+                                title="URL Avatar"
+                                subtitle="Semesnica"
+                                />
+                              <CardMedia
+                                // overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
+                                 >
+                             </CardMedia>
+                              <CardTitle title="Semesnica" subtitle="A beutiful place in Bosnia and Herzegovina" />
+                              <CardText>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
+                                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
+                                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+                              </CardText>
+                              <CardActions>
+                                <FlatButton label="Action1" />
+                                <FlatButton label="Action2" />
+                              </CardActions>
+                            </Card>
+
+                            <GridList key={"3"}
+                              cellHeight={200}
+                              style={styles.gridList}
+                              >
+                              <Subheader>December</Subheader>
+                              {assets.map((assets) => (
+                                <GridTile
+                                  key={assets.img}
+                                  title={assets.title}
+                                  subtitle={<span>by <b>{assets.author}</b></span>}
+                                  actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+                                  >
+                                </GridTile>
+                              ))}
+                            </GridList>
+
+                            <Card key={"4"}>
+                              <CardHeader
+                                title="Without Avatar"
+                                subtitle="Subtitle"
+                                actAsExpander={true}
+                                showExpandableButton={true}
+                                />
+                              <CardText expandable={true}>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
+                                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
+                                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+                              </CardText>
+                              <CardActions expandable={true}>
+                                <FlatButton label="Action1" />
+                                <FlatButton label="Action2" />
+                              </CardActions>
+                            </Card>
+
+                            <Paper key={"2"} style={styles.paper}  />
+
+                          </ResponsiveReactGridLayout>
               </div>
             </Tab>
             <Tab
@@ -128,6 +250,11 @@ class CampaignPage extends Component {
             <Tab
             //  value={'3'}
               icon={<FontIcon className="material-icons">add</FontIcon>}>
+               <div style={{overflow: 'none', backgroundColor: muiTheme.palette.convasColor}}>
+                 <List  id='test' style={{height: '100%'}} ref={(field) => { this.list = field; }}>
+                    {this.renderList(assets)}
+                </List>
+              </div>
             </Tab>
           </Tabs>
         </Scrollbar>
@@ -152,10 +279,15 @@ CampaignPage.propTypes = {
   auth: PropTypes.object.isRequired,
   isGranted: PropTypes.func.isRequired,
   muiTheme: PropTypes.object.isRequired,
+  onLayoutChange: PropTypes.func.isRequired,
+  reactGridLayout: PropTypes.object.isRequired,
+  layout: PropTypes.object.isRequired,
+  layouts: PropTypes.object.isRequired,
+
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { auth, browser, lists, persistentValues } = state;
+  const { auth, browser, lists, persistentValues, onLayoutChange } = state;
   const { match } = ownProps;
   const uid=match.params.uid;
   const currentCampaignUid=persistentValues['current_campaign_uid']?persistentValues['current_campaign_uid']:undefined;
@@ -185,11 +317,12 @@ const mapStateToProps = (state, ownProps) => {
     campaignPagePath,
     currentCampaignUid,
     browser,
+ 
     isGranted: grant=>isGranted(state, grant)
   };
 };
 
 
 export default connect(
-  mapStateToProps, { setSimpleValue, setPersistentValue }
+  mapStateToProps, { setSimpleValue, setPersistentValue, onLayoutChange, }
 )(injectIntl(muiThemeable()(withRouter(withFirebase(CampaignPage)))));
