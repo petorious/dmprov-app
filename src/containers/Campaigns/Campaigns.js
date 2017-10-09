@@ -9,6 +9,7 @@ import {List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import FontIcon from 'material-ui/FontIcon';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import { setPersistentValue } from '../../store/persistentValues/actions'
 import {withRouter} from 'react-router-dom';
 import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
@@ -17,20 +18,39 @@ import isGranted  from '../../utils/auth';
 import firebase from 'firebase';
 
 
-
-
-
 class Campaigns extends Component {
 
   componentDidMount() {
-    const { watchList, firebaseApp}=this.props;
-
+    const { watchList, firebaseApp, auth, uid, path  }=this.props;
+   
     let ref=firebaseApp.database().ref('campaigns')
     .orderByChild('authorUid')
     .equalTo('rJExILsTwDhC2mX28rpQ1MhpXfO2')
+   // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
     .limitToFirst(20);
 
     watchList(ref);
+  }
+
+  handleRowClick = (campaign) => {
+    const {auth, firebaseApp, history, campaigns, usePreview, setPersistentValue, currentChatUid} =this.props;
+
+    const key = campaign.key;
+    const campaignValues = campaign.val;
+    const userCampaignsRef = firebaseApp.database().ref(`/campaigns/${key}`);
+
+    const campaignData = {
+      campaign_name: campaignValues.campaign_name,
+    };
+
+    userCampaignsRef.update({...campaignData});
+
+    if (true) {
+      setPersistentValue('current_campaign_uid', key)
+      history.push(`/campaigns/${key}`);
+
+    } else {
+    }
   }
 
   handleAddCampaign = () => {
@@ -75,7 +95,7 @@ class Campaigns extends Component {
           key={index}
           primaryText={campaign.val.campaign_name}
           secondaryText={campaign.val.campaign_short_description}
-          onClick={()=>{history.push(`/campaigns/${campaign.key}`)}}
+          onClick={()=>{this.handleRowClick(campaigns[index])}}
           id={index}
           rightIconButton={
             <IconButton
@@ -92,7 +112,7 @@ class Campaigns extends Component {
 
 
   render(){
-    const { intl, campaigns, muiTheme, history, isGranted } =this.props;
+    const { intl, campaigns, muiTheme, history, isGranted, auth, uid, currentCampaignUid,} =this.props;
 
     return (
       <Activity
@@ -127,22 +147,28 @@ class Campaigns extends Component {
 Campaigns.propTypes = {
   campaigns: PropTypes.array.isRequired,
   history: PropTypes.object,
+  currentCampaignUid: PropTypes.object,
   isGranted: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  const { auth, browser, lists } = state;
+const mapStateToProps = (state, ownProps) => {
+  const { auth, browser, lists, persistentValues} = state;
+  const { uid } = ownProps;
+  const currentCampaignUid=persistentValues['current_campaign_uid']?persistentValues['current_campaign_uid']:undefined;
+
 
   return {
     campaigns: lists.campaigns,
     auth,
+    uid,
     browser,
+    currentCampaignUid,
     isGranted: grant=>isGranted(state, grant)
   };
 };
 
 
 export default connect(
-  mapStateToProps,
+  mapStateToProps, {setPersistentValue}
 )(injectIntl(muiThemeable()(withRouter(withFirebase(Campaigns)))));

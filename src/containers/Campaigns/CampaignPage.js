@@ -3,6 +3,8 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setSimpleValue } from '../../store/simpleValues/actions';
+import { setPersistentValue } from '../../store/persistentValues/actions';
+import { onLayoutChange } from '../../store/grids/actions';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import { injectIntl } from 'react-intl';
 import { Activity } from '../../containers/Activity';
@@ -22,25 +24,43 @@ import isGranted  from '../../utils/auth';
 //attempt at doing the campaign page path campaign name thing 
 const path='/campaigns'
 
+const tabPath = '/campaign_tabs'
+
 class CampaignPage extends Component {
 
   componentDidMount() {
-    const { watchList, firebaseApp, campaignPagePath}=this.props;
+      const { watchList, firebaseApp, auth, uid, path  }=this.props;
+     
+      let ref=firebaseApp.database().ref('assets')
+      .orderByChild('currentCampaignUid')
+      .equalTo('-KvecdzKQJ6qlr6U79Xc')
+     // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
+      .limitToFirst(20);
 
-    let ref=firebaseApp.database().ref('assets/').limitToFirst(20);
+      watchList(ref);
+    }
 
-    watchList(ref, campaignPagePath);
-  }
 
   handleTabActive = (value,) => {
     const { history, uid, firebaseApp } = this.props
-    let key=firebaseApp.database().ref(`/campaigns/${uid}`).push().key
+    let key=firebaseApp.database().ref(`/campaign_tabs/${uid}/`).push().key
 
-    history.push(`${path}/${uid}1`)
+    history.push(`${path}/${key}`)
   }
 
+  // handleLayoutChange = (layout) => {
+  //   const {setOnLayoutChange}=this.props
+  //   setOnLayoutChange{'on_layout_change', true}
+
+  // }
+
+ 
+
+
   renderList(assets) {
-    const {history} =this.props;
+    const {history, currentCampaignUid, list} =this.props;
+
+  //const currentCampaignUid=key;
 
     if(assets===undefined){
       return <div></div>
@@ -48,7 +68,6 @@ class CampaignPage extends Component {
 
     return _.map(assets, (asset, index) => {
 
-      //campaign.userId===auth.uid?
 
 
       return <div key={index}>
@@ -65,8 +84,8 @@ class CampaignPage extends Component {
             />
           }
           key={index}
-          primaryText={asset.val.name}
-          secondaryText={asset.val.slug}
+          primaryText={asset.val.asset_name}
+          secondaryText={asset.val.asset_slug}
           id={index}
         />
          
@@ -77,13 +96,13 @@ class CampaignPage extends Component {
 
 
   render(){
-    const { intl, assets, muiTheme, history, isGranted, campaignDisplayName, uid } =this.props;
+    const { intl, assets, muiTheme, history, isGranted, campaignDisplayName, currentCampaignUid, uid } =this.props;
 
     return (
       <Activity
         isLoading={assets===undefined}
         containerStyle={{overflow:'hidden'}}
-        title={`${campaignDisplayName}`}
+        title={`${currentCampaignUid}`}
         >
         <Scrollbar>
           <Tabs
@@ -136,10 +155,13 @@ CampaignPage.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { auth, browser, lists } = state;
+  const { auth, browser, lists, persistentValues } = state;
   const { match } = ownProps;
   const uid=match.params.uid;
+  const currentCampaignUid=persistentValues['current_campaign_uid']?persistentValues['current_campaign_uid']:undefined;
 
+  // const campaignPageName= 
+  // get the value from the {campaign key} from the firebase 
 
   const campaignPagePath=`campaigns/${auth.uid}`;
   const campaigns=lists[campaignPagePath]?lists[campaignPagePath]:[];
@@ -161,6 +183,7 @@ const mapStateToProps = (state, ownProps) => {
     campaigns,
     campaignDisplayName,
     campaignPagePath,
+    currentCampaignUid,
     browser,
     isGranted: grant=>isGranted(state, grant)
   };
@@ -168,5 +191,5 @@ const mapStateToProps = (state, ownProps) => {
 
 
 export default connect(
-  mapStateToProps, { setSimpleValue }
+  mapStateToProps, { setSimpleValue, setPersistentValue }
 )(injectIntl(muiThemeable()(withRouter(withFirebase(CampaignPage)))));

@@ -55,40 +55,40 @@ class CampaignForm extends Component {
   //     history.push(`/chats/edit/${key}`);
   //   }
   // } 
-  handleLinkTagsToggleChange = (e, i, isInputChecked, key) => {
-    const { firebaseApp, match } = this.props;
-    const uid=match.params.uid;
+  // handleLinkTagsToggleChange = (e, i, isInputChecked, key) => {
+  //   const { firebaseApp, match } = this.props;
+  //   const uid=match.params.uid;
 
-    if(isInputChecked){
-      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).set(true);
-    }else{
-      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).remove();
-    }
+  //   if(isInputChecked){
+  //     firebaseApp.database().ref(`/campaigns/${uid}/${key}`).set(true);
+  //   }else{
+  //     firebaseApp.database().ref(`/campaigns/${uid}/${key}`).remove();
+  //   }
 
-  }
-  handleLinkWidgetsToggleChange = (e, i, isInputChecked, key) => {
-    const { firebaseApp, match } = this.props;
-    const uid=match.params.uid;
+  // }
+  // handleLinkWidgetsToggleChange = (e, i, isInputChecked, key) => {
+  //   const { firebaseApp, match } = this.props;
+  //   const uid=match.params.uid;
 
-    if(isInputChecked){
-      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).set(true);
-    }else{
-      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).remove();
-    }
+  //   if(isInputChecked){
+  //     firebaseApp.database().ref(`/campaigns/${uid}/${key}`).set(true);
+  //   }else{
+  //     firebaseApp.database().ref(`/campaigns/${uid}/${key}`).remove();
+  //   }
 
-  }
+  // }
 
-  handleIsPublicToggleChange = (e, i, isInputChecked, key) => {
-    const { firebaseApp, match } = this.props;
-    const uid=match.params.uid;
+  // handleIsPublicToggleChange = (e, i, isInputChecked, key) => {
+  //   const { firebaseApp, match } = this.props;
+  //   const uid=match.params.uid;
 
-    if(isInputChecked){
-      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).set(true);
-    }else{
-      firebaseApp.database().ref(`/campaigns/${uid}/${key}`).remove();
-    }
+  //   if(isInputChecked){
+  //     firebaseApp.database().ref(`/campaigns/${uid}/${key}`).set(true);
+  //   }else{
+  //     firebaseApp.database().ref(`/campaigns/${uid}/${key}`).remove();
+  //   }
 
-  }
+  // }
 
   render() {
     const{

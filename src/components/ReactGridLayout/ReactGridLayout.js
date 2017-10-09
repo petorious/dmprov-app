@@ -5,7 +5,7 @@ import {GRID_MARGIN, GRID_UNIT} from 'constants';
 
 //*note lower RGL is static 
 
-const ReactGridCanvas = (props) => {
+const ReactGridLayout = (props) => {
   const {  muiTheme, ...rest } = props;
   const styles = {
     root: {
@@ -35,7 +35,7 @@ function handleLayoutChange(layout) {
   {
       
 
-  const {canvas, onLayoutChange} = this.props
+  const {reactGridLayout, onLayoutChange} = this.props
  
   const layoutToSave=layout;  
 
@@ -62,8 +62,6 @@ function handleLayoutChange(layout) {
           a: { i: 'a', x: 7, y: 5, w: 4, h: 2 },
           b: { i: 'b', x: 2, y: 1, w: 5, h: 1 },
           c: { i: 'c', x: 4, y: 3, w: 3, h: 2 },
-          //d: { i: 'd', x: 0, y: 2, w: 3, h: 2 },
-          e: { i: 'e', x: 3, y: 8, w: 5, h: 6 },
         },
         width: initialWidthAndCols[0],
         cols: initialWidthAndCols[3],
@@ -77,24 +75,24 @@ function handleLayoutChange(layout) {
       {i: 'c', x: 4, y: 0, w: 1, h: 2}
        ] 
 
-  var layouts = canvas.layout?{lg:canvas.layout}:{lg:layout}
+  var layouts = reactGridLayout.layout?{lg:reactGridLayout.layout}:{lg:layout}
   }
- // render () ; 
-   // const rglProps = {
-   //    isResizable: false,
-   //    // onDrag: this.onDrag,
-   //    // onDragStart: this.onDragStart,
-   //    // onDragStop: this.onDragStop,
-   //    onLayoutChange: this.onLayoutChange,
-   //    // onResize: this.onResize,
-   //    // onResizeStart: this.onResizeStart,
-   //    // onResizeStop: this.onResizeStop,
-   //  };
-  
-    //const renderedWidgets = this.props.widgets.map(this.renderWidget);
+   render () ; 
+     const rglProps = {
+        isResizable: false,
+        // onDrag: this.onDrag,
+        // onDragStart: this.onDragStart,
+        // onDragStop: this.onDragStop,
+        onLayoutChange: this.onLayoutChange,
+        // onResize: this.onResize,
+        // onResizeStart: this.onResizeStart,
+        // onResizeStop: this.onResizeStop,
+      };
+    
+      const renderedWidgets = this.props.widgets.map(this.renderWidget);
 
-    //const dashProps = this.props.dashboard;
-   // dashProps.layout = Object.freeze(dashProps.layout);
+      const dashProps = this.props.dashboard;
+       dashProps.layout = Object.freeze(dashProps.layout);
 
     return (
       <div>
@@ -114,4 +112,4 @@ function handleLayoutChange(layout) {
  
 
 
-export default muiThemeable()(ReactGridCanvas);
+export default muiThemeable()(ReactGridLayout);

@@ -31,7 +31,7 @@ class Campaign extends Component {
     const { intl } = this.props;
     const errors = {}
 
-    errors.capaign_name = !values.campaign_name?intl.formatMessage({id: 'error_required_field'}):'';
+    errors.campaign_name = !values.campaign_name?intl.formatMessage({id: 'error_required_field'}):'';
     errors.campaign_short_description = !values.campaign_short_description?intl.formatMessage({id: 'error_required_field'}):'';
     errors.campaign_full_description = !values.campaign_full_description?intl.formatMessage({id: 'error_required_field'}):'';
     errors.system = !values.system?intl.formatMessage({id: 'error_required_field'}):'';
@@ -53,17 +53,7 @@ class Campaign extends Component {
   }
 
   handleCreateValues = (values) => {
-    // var user = firebase.auth().currentUser;
 
-    // if (user != null) {
-    //   user.providerData.forEach(function (profile) {
-    //     console.log("Sign-in provider: "+profile.providerId);
-    //     console.log("  Provider-specific UID: "+profile.uid);
-    //     console.log("  Name: "+profile.displayName);
-    //     console.log("  Email: "+profile.email);
-    //     console.log("  Photo URL: "+profile.photoURL);
-    //   });
-    // }
   
     const { firebaseApp, path, auth, uid}=this.props;
     

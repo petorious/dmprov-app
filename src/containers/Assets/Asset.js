@@ -43,6 +43,21 @@ class Asset extends Component {
     }
   }
 
+  handleCreateValues = (values) => {
+
+  
+    const { firebaseApp, path, auth, uid, persistentValues, current_campaign_uid, currentCampaignUid}=this.props;
+    
+    return {
+
+      created: firebase.database.ServerValue.TIMESTAMP ,
+        userId: auth.uid,
+        authorUid: auth.uid,
+        currentCampaignUid: persistentValues['current_campaign_uid']?persistentValues['current_campaign_uid']:undefined,
+      ...values
+    }
+  }
+
   handleClose = () => {
     const { setDialogIsOpen }=this.props;
 
@@ -133,6 +148,7 @@ class Asset extends Component {
             validate={this.validate}
             onSubmitSuccess={(values)=>{history.push('/assets');}}
             onDelete={(values)=>{history.push('/assets');}}
+            handleCreateValues={this.handleCreateValues}
             uid={match.params.uid}>
             <AssetForm />
           </FireForm>
@@ -160,15 +176,20 @@ Asset.propTypes = {
   submit: PropTypes.func.isRequired,
   muiTheme: PropTypes.object.isRequired,
   isGranted: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  persistentValues: PropTypes.object.isRequired,
+
 };
 
 
 const mapStateToProps = (state) => {
-  const { intl, dialogs } = state;
+  const { intl, dialogs, auth, persistentValues } = state;
 
   return {
     intl,
     dialogs,
+    persistentValues,
+    auth,
     isGranted: grant=>isGranted(state, grant)
   };
 };

@@ -11,10 +11,13 @@ import { ImageCropDialog } from '../../containers/ImageCropDialog';
 import { withRouter } from 'react-router-dom';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import PropTypes from 'prop-types';
+import {List, ListItem } from 'material-ui/List';
+import {SuperSelectField} from '../../containers/SuperSelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 
 
-class Form extends Component {
+class AssetForm extends Component {
 
   handlePhotoUploadSuccess = (snapshot) =>{
     const { setDialogIsOpen, change}=this.props;
@@ -29,6 +32,7 @@ class Form extends Component {
       initialized,
       setDialogIsOpen,
       dialogs,
+      auth,
       match,
     } = this.props;
 
@@ -85,8 +89,8 @@ class Form extends Component {
             name="asset_name"
             disabled={!initialized}
             component={TextField}
-            hintText={intl.formatMessage({id: 'name_hint'})}
-            floatingLabelText={intl.formatMessage({id: 'asset_name'})}
+            hintText={intl.formatMessage({id: 'asset_name_hint'})}
+            floatingLabelText={intl.formatMessage({id: 'asset_name_label'})}
             ref="asset_name"
             withRef
           />
@@ -97,13 +101,48 @@ class Form extends Component {
             name="asset_slug"
             disabled={!initialized}
             component={TextField}
-            hintText={intl.formatMessage({id: 'full_name_hint'})}
+            hintText={intl.formatMessage({id: 'asset_name_hint'})}
             floatingLabelText={intl.formatMessage({id: 'asset_slug_label'})}
             ref="asset_slug"
             withRef
           />
         </div>
 
+        <div>
+           <ListItem
+              disabled={true}/>
+           <Field
+              name="asset_type"
+              elementHeight={60}
+              component={SuperSelectField}
+              hintText={intl.formatMessage({id: 'asset_type'})}
+              ref="asset_type"
+              withRef
+            >
+            <MenuItem value={1} label={intl.formatMessage({id: 'item'})} primaryText={intl.formatMessage({id: 'item'})}/>
+            <MenuItem value={2} label={intl.formatMessage({id: 'npc'})} primaryText={intl.formatMessage({id: 'npc'})}/>
+            <MenuItem value={3} label={intl.formatMessage({id: 'location'})} primaryText={intl.formatMessage({id: 'location'})}/>
+            <MenuItem value={4} label={intl.formatMessage({id: 'organization'})} primaryText={intl.formatMessage({id: 'organization'})}/>
+            <MenuItem value={5} label={intl.formatMessage({id: 'spellpower'})} primaryText={intl.formatMessage({id: 'spellpower'})}/>
+            <MenuItem value={6} label={intl.formatMessage({id: 'puztrap'})} primaryText={intl.formatMessage({id: 'puztrap'})}/>
+            <MenuItem value={7} label={intl.formatMessage({id: 'condition'})} primaryText={intl.formatMessage({id: 'condition'})}/>
+            <MenuItem value={8} label={intl.formatMessage({id: 'encounter'})} primaryText={intl.formatMessage({id: 'encounter'})}/>
+            <MenuItem value={9} label={intl.formatMessage({id: 'note'})} primaryText={intl.formatMessage({id: 'note'})}/>
+            <MenuItem value={10} label={intl.formatMessage({id: 'vehicle'})} primaryText={intl.formatMessage({id: 'vehicle'})}/>
+            <MenuItem value={11} label={intl.formatMessage({id: 'other'})} primaryText={intl.formatMessage({id: 'other'})}/>
+           </Field>
+          </div>
+          <div>
+            <Field
+              name="asset_subtype"
+              disabled={!initialized}
+              component={TextField}
+              hintText={intl.formatMessage({id: 'asset_subtype_hint'})}
+              floatingLabelText={intl.formatMessage({id: 'asset_subtype_label'})}
+              ref="asset_subtype"
+              withRef
+            />
+          </div>
         <div>
           <Field
             name="vat"
@@ -115,7 +154,6 @@ class Form extends Component {
             withRef
           />
         </div>
-
 
         <div>
           <Field
@@ -130,6 +168,20 @@ class Form extends Component {
             withRef
           />
         </div>
+        <div>
+          <Field
+            name="tags"
+            disabled={!initialized}
+            component={TextField}
+            multiLine={true}
+            rows={2}
+            hintText={intl.formatMessage({id: 'tags_hint'})}
+            floatingLabelText={intl.formatMessage({id: 'tags_label'})}
+            ref="tags"
+            withRef
+          />
+        </div>
+
 
         <ImageCropDialog
           path={`assets/${uid}`}
@@ -147,7 +199,7 @@ class Form extends Component {
 }
 }
 
-Form.propTypes = {
+AssetForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   initialized: PropTypes.bool.isRequired,
@@ -157,16 +209,18 @@ Form.propTypes = {
 };
 
 
-Form=reduxForm({form: 'asset'})(Form);
+AssetForm=reduxForm({form: 'asset'})(AssetForm);
 const selector = formValueSelector('asset')
 
-const mapStateToProps = state => {
-  const { intl, vehicleTypes, users, dialogs } = state;
+const mapStateToProps = (state, ownProps) => {
+  const { intl, vehicleTypes, users, dialogs, auth } = state;
+  const { uid } = ownProps;
 
   return {
     intl,
     vehicleTypes,
     users,
+    uid,
     dialogs,
     photoURL: selector(state, 'photoURL')
   };
@@ -174,4 +228,4 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps, { setDialogIsOpen }
-)(injectIntl(withRouter(muiThemeable()(Form))));
+)(injectIntl(withRouter(muiThemeable()(AssetForm))));

@@ -20,8 +20,11 @@ class Assets extends Component {
   componentDidMount() {
     const { watchList, firebaseApp}=this.props;
 
-    let ref=firebaseApp.database().ref('assets').limitToFirst(20);
-
+     let ref=firebaseApp.database().ref('assets')
+     .orderByChild('authorUid')
+     .equalTo('rJExILsTwDhC2mX28rpQ1MhpXfO2')
+    // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
+     .limitToFirst(20);
     watchList(ref);
   }
 
@@ -96,14 +99,18 @@ Assets.propTypes = {
   assets: PropTypes.array.isRequired,
   history: PropTypes.object,
   isGranted: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const { auth, browser, lists } = state;
+  const { uid } = ownProps;
 
   return {
     assets: lists.assets,
     auth,
+    uid,
     browser,
     isGranted: grant=>isGranted(state, grant)
   };

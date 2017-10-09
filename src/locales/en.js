@@ -210,6 +210,14 @@ const messages=defineMessages({
   globalize: 'Make Public',
   player_count: 'Players',
   full_description_hint: 'Full Description',
+  tags_label: 'Enter Tags',
+  asset_type: 'Asset Type',
+  asset_slug_label: 'Asset Short Description',
+  asset_name_label: 'Asset Name', 
+  asset_subtype_label: 'Asset Subtype',
+
+
+  
 });
 
 export default messages;
