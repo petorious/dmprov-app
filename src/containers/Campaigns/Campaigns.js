@@ -38,7 +38,7 @@ class Campaigns extends Component {
     const key = campaign.key;
     const campaignValues = campaign.val;
     const userCampaignsRef = firebaseApp.database().ref(`/campaigns/${key}`);
-
+// // make a note for later; this has the steps for the title of the campaignPage being right   
     const campaignData = {
       campaign_name: campaignValues.campaign_name,
     };
@@ -147,7 +147,7 @@ class Campaigns extends Component {
 Campaigns.propTypes = {
   campaigns: PropTypes.array.isRequired,
   history: PropTypes.object,
-  currentCampaignUid: PropTypes.object,
+  currentCampaignUid: PropTypes.string,
   isGranted: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };

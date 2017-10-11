@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
-import {Field, reduxForm, formValueSelector, FieldArray, formValues, } from 'redux-form';
+import {Field, reduxForm, formValueSelector, } from 'redux-form';
 import {SuperSelectField} from '../../containers/SuperSelectField';
-import firebase from 'firebase';
+//import firebase from 'firebase';
 import { TextField, } from 'redux-form-material-ui';
-import Toggle from 'material-ui/Toggle';
+//import Toggle from 'material-ui/Toggle';
 import MenuItem from 'material-ui/MenuItem';
-import { setSimpleValue } from '../../store/simpleValues/actions';
-import {List, ListItem } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
+//import { setSimpleValue } from '../../store/simpleValues/actions';
+import {ListItem } from 'material-ui/List';
+//import Divider from 'material-ui/Divider';
 import {Avatar} from '../../containers/Avatar';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
@@ -93,23 +93,23 @@ class CampaignForm extends Component {
   render() {
     const{
       handleSubmit,
-      handleItemClick,
-      setPersistentValue,
+     //handleItemClick,
+    //setPersistentValue,
       intl,
       initialized,
-      i,
-      auth,
+   // i,
+   // auth,
       setDialogIsOpen,
       dialogs,
       match,
     } = this.props;
 
     const uid=match.params.uid;
-    let linkTags=[];
-    let linkWidgets=[];
-    let isPublic=[];
-    const key=i;
-    const val=[i];
+    // let linkTags=[];
+    // let linkWidgets=[];
+    // let isPublic=[];
+    // const key=i;
+    // const val=[i];
 
 
     return (
@@ -305,7 +305,7 @@ CampaignForm=reduxForm({form: 'campaign'})(CampaignForm);
 const selector = formValueSelector('campaign')
 
 const mapStateToProps = (state, ownProps) => {
-  const { lists, auth, browser, simpleValues, intl, vehicleTypes, users, dialogs, } = state;
+  const { intl, vehicleTypes, users, dialogs, } = state;
   const { uid } = ownProps;
 
   return {

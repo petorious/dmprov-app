@@ -94,9 +94,9 @@ class ChatMessages extends Component {
 
     const newMessage = {
       created: firebase.database.ServerValue.TIMESTAMP,
-      // authorName: auth.displayName,
-      // authorUid: auth.uid,
-      // authorPhotoUrl: auth.photoURL,
+      authorName: auth.displayName,
+      authorUid: auth.uid,
+      authorPhotoUrl: auth.photoURL,
     }
 
     if (type === 'image') {

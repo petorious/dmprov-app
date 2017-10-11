@@ -11,7 +11,7 @@ import { ImageCropDialog } from '../../containers/ImageCropDialog';
 import { withRouter } from 'react-router-dom';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import PropTypes from 'prop-types';
-import {List, ListItem } from 'material-ui/List';
+import { ListItem } from 'material-ui/List';
 import {SuperSelectField} from '../../containers/SuperSelectField';
 import MenuItem from 'material-ui/MenuItem';
 
@@ -32,7 +32,6 @@ class AssetForm extends Component {
       initialized,
       setDialogIsOpen,
       dialogs,
-      auth,
       match,
     } = this.props;
 
@@ -213,7 +212,7 @@ AssetForm=reduxForm({form: 'asset'})(AssetForm);
 const selector = formValueSelector('asset')
 
 const mapStateToProps = (state, ownProps) => {
-  const { intl, vehicleTypes, users, dialogs, auth } = state;
+  const { intl, vehicleTypes, users, dialogs } = state;
   const { uid } = ownProps;
 
   return {

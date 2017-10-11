@@ -55,7 +55,7 @@ class Campaign extends Component {
   handleCreateValues = (values) => {
 
   
-    const { firebaseApp, path, auth, uid}=this.props;
+    const { path, auth, uid}=this.props;
     
     return {
 

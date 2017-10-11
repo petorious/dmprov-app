@@ -6,8 +6,8 @@ import Toggle from 'material-ui/Toggle';
 import allThemes from '../../themes';
 import allLocales from '../../locales';
 import firebase from 'firebase';
-import {List, ListItem} from 'material-ui/List';
-import Divider from 'material-ui/Divider';
+//import { ListItem } from 'material-ui/List';
+//import Divider from 'material-ui/Divider';
 import { injectIntl } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import { withFirebase } from 'firekit';
@@ -18,7 +18,6 @@ const DrawerContent = (props, context) => {
     responsiveDrawer,
     setResponsive,
     theme,
-    currentCampaignUid,
     locale,
     updateTheme,
     updateLocale,
@@ -48,23 +47,23 @@ const DrawerContent = (props, context) => {
       history.push(index);
     }
   };
-// attempt at doing the campaign active name thing
+// //attempt at doing the campaign active name thing
 
-  const nameItem = (i, k) => {
-    const { list, intl, currentCampaignUid, muiTheme } = this.props;
+  // const nameItem = (i, k) => {
+  //   const { list, intl, currentCampaignUid, muiTheme } = this.props;
 
-    const key=list[i].key;
-    const val=list[i].val;
+  //   const key=list[i].key;
+  //   const val=list[i].val;
 
-    return <div key={i}>
-      <ListItem
-        key={key}
-        id={key}
-        primaryText={val.campaign_name}
-      />
-      <Divider inset={true}/>
-    </div>;
-  }
+  //   return <div key={i}>
+  //     <ListItem
+  //       key={key}
+  //       id={key}
+  //       primaryText={val.campaign_name}
+  //     />
+  //     <Divider inset={true}/>
+  //   </div>;
+  // }
 
 
   const themeItems = allThemes.map((t)=>{

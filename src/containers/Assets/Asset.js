@@ -46,7 +46,7 @@ class Asset extends Component {
   handleCreateValues = (values) => {
 
   
-    const { firebaseApp, path, auth, uid, persistentValues, current_campaign_uid, currentCampaignUid}=this.props;
+    const { firebaseApp, auth, uid, persistentValues, current_campaign_uid }=this.props;
     
     return {
 
