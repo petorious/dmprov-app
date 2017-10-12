@@ -257,8 +257,6 @@ class CampaignPage extends Component {
             index, 
             muiTheme, 
             history, 
-            reactGridLayout,
-            onLayoutChange, 
             isGranted, 
             campaignDisplayName, 
             currentCampaignUid, 
@@ -267,20 +265,6 @@ class CampaignPage extends Component {
           } =this.props;
 
 
-    function handleLayoutChange(layout){
-      layoutToSave=layout;
-    };
-
-// // ## layouts = the firebase layouts 
-    var layout = {
-          1:{ i: '1', x: 4, y: 6, w: 1, h: 1 },
-          2:{ i: '2', x: 2, y: 1, w: 1, h: 1 },
-          3:{ i: '3', x: 4, y: 3, w: 1, h: 1 },
-          4:{ i: '4', x: 4, y: 3, w: 1, h: 1 },
-        };
-
-    var layouts = layout;
-    //.layout?{lg:reactGridLayout.layout}:{lg:layout};
 
 
     return (
@@ -297,77 +281,7 @@ class CampaignPage extends Component {
              // value={'1'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
                <div style={{overflow: 'none', backgroundColor: muiTheme.palette.canvasColor}}>
-                <ResponsiveReactGridLayout
-                            isDraggable={browser.greaterThan.medium}
-                            isResizable={browser.greaterThan.medium}
-                            onLayoutChange={handleLayoutChange}
-                            verticalCompact={false}
-                            className="layout"
-                            layouts={layouts}
-                            autoSize={true}
-                            rowHeight={95}
-                            breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
-                            cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
-                            ref="grid"
-                            >
-                          
-                            <Card key={'1'}
-                              style={{overflow: 'none', backgroundColor:muiTheme.palette.primary2Color,
-                                  }}
-                              data-grid={{x: 0, y: 0, w: 2, h: 1, static: false}}>
-                              <CardHeader
-                               title="Semesnica" 
-                               subtitle="A beutiful place"
-                               actAsExpander
-                               showExpandableButton={true} />
-                              <CardText expandable={true}> 
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-                              </CardText>
-                              <CardActions expandable={true}>
-                                <FlatButton label="Action1" />
-                                <FlatButton label="Action2" />
-                              </CardActions>
-                            </Card>
-
-                            <Card key={'4'}
-                            style={{overflow: 'none', backgroundColor:muiTheme.palette.primary2Color,
-                                }}>
-                              <CardHeader
-                               title="Asset" 
-                               subtitle="Location"
-                               />                          
-                            </Card>
-
-                            
-
-                            <Card key={'2'}
-                              style={{overflow: 'none', backgroundColor:muiTheme.palette.primary2Color}}
-                              data-grid={{x: 6, y: 0, w: 3, h: 1, static: false }}>
-                              <CardHeader
-                                title="Without Avatar"
-                                subtitle="Subtitle"
-                                actAsExpander={true}
-                                showExpandableButton={true}
-                                />
-                              <CardText expandable={true}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-                              </CardText>
-                              <CardActions expandable={true}>
-                                <FlatButton label="Action1" />
-                                <FlatButton label="Action2" />
-                              </CardActions>
-                            </Card>
-
-                            <Paper key={'3'}  style={{overflow: 'none', backgroundColor:muiTheme.palette.primary2Color}}
-                                 />
-
-                   </ResponsiveReactGridLayout>
+                 <ReactGridLayout/> 
               </div>
             </Tab>
             <Tab

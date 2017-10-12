@@ -1,7 +1,29 @@
-import {React, Component} from 'react';
-import { ResponsiveReactGridLayout, GridItem } from 'react-grid-layout';
+import React, {Component} from 'react';
+import _ from 'lodash';
+import { connect } from 'react-redux';
+import { onLayoutChange } from '../../store/grids/actions';
+import PropTypes from 'prop-types';
+import Divider from 'material-ui/Divider';
+import { Responsive, WidthProvider, GridItem } from 'react-grid-layout';
 import muiThemeable from 'material-ui/styles/muiThemeable';
-import {GRID_MARGIN, GRID_UNIT} from 'constants';
+import FontIcon from 'material-ui/FontIcon';
+import FlatButton from 'material-ui/FlatButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
+import {withRouter} from 'react-router-dom';
+import Avatar from 'material-ui/Avatar';
+import { withFirebase } from 'firekit';
+import firebase from 'firebase';
+import { injectIntl } from 'react-intl';
+
+
+//import {GRID_MARGIN, GRID_UNIT} from 'constants';
+
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const styles = {
   root: {
@@ -31,65 +53,331 @@ class ReactGridLayout extends Component {
 
   constructor(props) {
     super(props)
-  };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {uid: currentUid, unwatchList, path} =this.props;
+    const {uid: nextUid} =nextProps;
+
+    if(currentUid!==nextUid){
+
+      unwatchList(path)
+      this.initAssets(nextProps)
+    }
+
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    
+  }
+  componentWillMount() {
+    this.initAssets(this.props)
+    this.initLayouts(this.props)
+  }
+
+  initAssets = (props) => {
+    const {watchList, firebaseApp, path}=props;
+
+    let assetsRef=firebaseApp.database().ref('assets/').orderByKey();
+    watchList(assetsRef);
+
+  }
+
+  initLayouts = (props) => {
+    const {watchList, firebaseApp, path}=props;
+
+    let layoutsRef=firebaseApp.database().ref('react_grid_layouts/').orderByKey();
+    watchList(layoutsRef);
+
+  }
+
+  onLayoutChange = (layout) => {
+
+      layoutToSave=layout;
+    };
+
+  componentDidMount() {
+      const { watchList, firebaseApp}=this.props;
+
+       let ref=firebaseApp.database().ref('assets')
+       // .orderByChild('currentCampaignUid')
+       // .equalTo('-KvecdzKQJ6qlr6U79Xc')
+      // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
+       .limitToFirst(20);
+      watchList(ref);
+    }
+  
+
+
+  renderGrid(assets) {
+    const {history} =this.props;
+    if(assets===undefined){
+      return <div></div>
+    }
+      return _.map(assets, (asset, index) => {
+
+        return <div key={index}>
+        <GridItem>
+            <Card> 
+             leftAvatar={
+              <Avatar
+                src={asset.val.photoURL}
+                alt="bussines"
+                icon={
+                  <FontIcon className="material-icons">
+                    add_circle
+                  </FontIcon>
+                }
+              />
+            }
+            key={index}
+            primaryText={asset.val.name}
+            secondaryText={asset.val.asset_slug}
+            onClick={()=>{history.push(`/assets/edit/${asset.key}`)}}
+            id={index}
+               />
+            <Divider inset={true}/>
+          </Card>
+         </GridItem>
+        </div>
+      });
+    }
+  
+
+  ////renderGrid(widgets)
 
   
-  render () { 
+  render (){ 
+    const { messages,
+            muiTheme, 
+            index, 
+            intl,
+            assets,
+            asset,
+            title, 
+            subtitle, 
+            assetsRef,
+            browser, 
+            renderGrid,
+            reactGridLayout, 
+            onLayoutChange, 
+            auth, 
+            } = this.props;
 
-    function handleLayoutChange(layout){
-        layoutToSave=layout;
-      };
+        // const key = assetsRef[i].key;
+        // const asset_name = assetsRef[i].val.asset_slug;
+        // const asset_slug = assetsRef[i].val.asset_slug;
 
-    const { messages, browser, reactGridLayout, onLayoutChange} = this.props
+   
+//## Below is the layout. To  be imported from firebase. 
 
     var layout = [
-       //{layout.uid.values}
+      {i: '1', x: 6, y: 0, w: 4, h: 4.2,isResizable:false},
+      {i: '2', x: 0, y: 0, w: 3, h: 1},
+      {i: '3', x: 4, y: 0, w: 3, h: 3},
+      {i: '4', x: 4, y: 0, w: 3, h: 2},
+      {i: '5', x: 4, y: 0, w: 3, h: 2},
+      {i: '6', x: 6, y: 0, w: 4, h: 4.2,isResizable:false},
+      {i: '7', x: 0, y: 0, w: 3, h: 1},
+      {i: '8', x: 4, y: 0, w: 3, h: 3},
+      {i: '9', x: 4, y: 0, w: 3, h: 2},
+      {i: '10', x: 4, y: 0, w: 3, h: 2},
+      {i: '11', x: 6, y: 0, w: 4, h: 4.2,isResizable:false},
+      {i: '12', x: 0, y: 0, w: 3, h: 1},
+      {i: '13', x: 4, y: 0, w: 3, h: 3},
+      {i: '14', x: 4, y: 0, w: 3, h: 2},
+      {i: '15', x: 4, y: 0, w: 3, h: 2},
+      {i: 'index', x:1, y: 4, w:3, h:1},
+
     ];
     
-    var layouts = reactGridLayout.layout?{lg:reactGridLayout.layout}:{lg:layout}
+    var layouts = {md:layout}
+  ////  var layouts = reactGridLayout.layout?{lg:reactGridLayout.layout}:{lg:layout}
 
-    const menuItems=[
-      { key: 'save',
-        text:messages.save||'save',
-        onTouchTap: ()=>onLayoutChange(layoutToSave)
-      },
-      {
-        key: 'reset',
-        text:messages.reset||'reset',
-        onTouchTap: ()=>onLayoutChange(undefined)
-      }
+  
+    // const assetData = [  
+    // {
+    //     // leftAvatar: {
+    //     //   <Avatar
+    //     //     src={asset.val.photoURL}
+    //     //     alt="arc"
+    //     //     icon={
+    //     //       <FontIcon className="material-icons">
+    //     //         add_circle
+    //     //       </FontIcon>
+    //     //     }
+    //     //   />
+    //     // },
+    //     key: '{index}',
+    //     title: '{asset.val.asset_name}',
+    //     subtitle: '{asset.val.asset_slug}',
+    //     id: '{index}',
+    // },
 
-    ];
+    // // failed array of objects
 
-    const tilesData = [  
-         {
-           img: 'static/water-plant-821293_640.jpg',
-           title: 'Water plant',
-           author: 'BkrmadtyaKarki',
-         },
-       ];
+    // const assetData = [  
+    // {
+    //     leftAvatar={
+    //       <Avatar
+    //         src={asset.val.photoURL}
+    //         alt="arc"
+    //         icon={
+    //           <FontIcon className="material-icons">
+    //             add_circle
+    //           </FontIcon>
+    //         }
+    //       />
+    //     },
+    //     key={index},
+    //     primaryText={asset.val.asset_name},
+    //     secondaryText={asset.val.asset_slug},
+    //     id={index},
+    // },
+
+   // ];
+       // //const {history, currentCampaignUid, list, assets, grids, GridItem} =this.props;
 
 
+       // const currentCampaignUid=key;
+
+       //   if(assets===undefined){
+       //     return <div></div>
+       //   }
+
+       // return _.map(assets, (asset, index) => {
+
+       //     return <div key={index}>
+       //       <GridItem
+       //         leftAvatar={
+       //           <Avatar
+       //             src={asset.val.photoURL}
+       //             alt="arc"
+       //             icon={
+       //               <FontIcon className="material-icons">
+       //                 add_circle
+       //               </FontIcon>
+       //             }
+       //           />
+       //         }
+       //         key={index}
+       //         primaryText={asset.val.asset_name}
+       //         secondaryText={asset.val.asset_slug}
+       //         id={index}
+       //       />
+              
+       //       <Divider inset={true}/>
+       //     </div>
+       //   });
+       // }
 
     return (
-      <div>
+      <div >
           <ResponsiveReactGridLayout
-            onLayoutChange={handleLayoutChange}
+            isDraggable={browser.greaterThan.medium}
+            isResizable={browser.greaterThan.medium}
+            onLayoutChange={onLayoutChange}
             className="layout"
             layouts={layouts}
             autoSize={true}
+            verticalCompact={false}
             breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
             cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
-            ref="grid"
-          // {GridItems}
-            />
-
+            // key={key}
+            // id={key}
+            ref={(field) => { this.grid = field; }}
+            //ref="grid"
+            >
+            <Card key='{index}'
+            style={{overflow: 'none', backgroundColor:muiTheme.palette.primary2Color,
+                                     }}>
+            <CardHeader
+               title="Semesnica" 
+               subtitle="A beautiful place"
+               actAsExpander
+               showExpandableButton={true} />
+              <CardText expandable={true}> 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
+                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
+                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+              </CardText>
+              <CardActions expandable={true}>
+                <FlatButton label="Action1" />
+                <FlatButton label="Action2" />
+              </CardActions>
+             // this.renderGrid(assets)
+            </Card>
+    
+          </ResponsiveReactGridLayout>
       </div>
-    )
+
+
+      
+      // // within the RGL===================================================================================================== 
+      
+      // <Card key={"-KvYtBBgQVirwaZI7jm-"} style={{overflow: 'none', backgroundColor:muiTheme.palette.primary2Color,
+      //                             }}>
+      //     <CardHeader
+      //       title={assetsRef.val.asset_name}
+      //       subtitle={assetsRef.val.asset_slug}
+      //       actAsExpander={true}
+      //       showExpandableButton={true}
+      //       />
+      //     <CardText expandable={true}>
+      //       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      //       Donec mattis pretium massa. 
+      //     </CardText>
+      //     <CardActions expandable={true}>
+      //       <FlatButton label="Action1" />
+      //       <FlatButton label="Action2" />
+      //     </CardActions>
+      //   </Card>                    
+
+
+
+
+      // {assetData.map((asset) => (
+      //   <GridItem
+      //   > {
+      //     key='{asset.val.uid}',
+      //     title='{asset.val.asset_name}',
+      //     subtitle='{asset.val.asset_slug}'
+      //     }
+      //   </GridItem>
+      //   ))}
+//
+     
+    );
     
   }
  };
+ ReactGridLayout.propTypes = {
+    onLayoutChange: PropTypes.func.isRequired,
+    assets: PropTypes.object,
+    reactGridLayout: PropTypes.object,
+    browser: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
+
+  }
+
+const mapStateToProps = (state, ownProps) => {
+   const { auth, browser, onLayoutChange, asset, grids } = state;
+   const { uid } = ownProps;
+   const path=`assets/${uid}/`
+
+  
+     return {
+       auth,
+       browser,
+       asset,
+       assets: grids.assets,
+       uid,
+     };
+   };
  
 
+export default connect(
+   mapStateToProps, { onLayoutChange }
+ )(injectIntl(muiThemeable()(withRouter(withFirebase(ReactGridLayout)))));
 
-export default muiThemeable()(ReactGridLayout);
