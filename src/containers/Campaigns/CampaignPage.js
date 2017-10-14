@@ -108,40 +108,40 @@ class CampaignPage extends Component {
 
 
  // // ## This renders the grid layout assets ( which should take account of which assets) 
- // renderGridItems(assets) {
- //   const {history, currentCampaignUid, list, GridItem} =this.props;
+ renderGrid(assets) {
+   const {history, currentCampaignUid, grid, GridItem} =this.props;
 
- // //const currentCampaignUid=key;
+ //const currentCampaignUid=key;
 
- //   if(assets===undefined){
- //     return <div></div>
- //   }
+   if(assets===undefined){
+     return <div></div>
+     alert('Assets were undef')
+   }
 
- //   return _.map(assets, (asset, index) => {
+   return _.map(assets, (asset, index) => {
 
- //     return <div key={index}>
- //       <GridItem
- //         leftAvatar={
- //           <Avatar
- //             src={asset.val.photoURL}
- //             alt="arc"
- //             icon={
- //               <FontIcon className="material-icons">
- //                 add_circle
- //               </FontIcon>
- //             }
- //           />
- //         }
- //         key={index}
- //         primaryText={asset.val.asset_name}
- //         secondaryText={asset.val.asset_slug}
- //         id={index}
- //       />
+     return <div key={index}>
+       <Card
+         leftAvatar={
+           <Avatar
+             src={asset.val.photoURL}
+             icon={
+               <FontIcon className="material-icons">
+                 add_circle
+               </FontIcon>
+             }
+           />
+         }
+         key={index}
+         primaryText={asset.val.asset_name}
+         secondaryText={asset.val.asset_slug}
+         id={index}
+       />
         
- //       <Divider inset={true}/>
- //     </div>
- //   });
- // }
+       <Divider inset={true}/>
+     </div>
+   });
+ }
 
  // // ## this renders the layout of the grid items, within react grid layout. 
  // // ## It includes the # of Grid Items, but not the content
@@ -222,8 +222,6 @@ class CampaignPage extends Component {
 
     return _.map(assets, (asset, index) => {
 
-
-
       return <div key={index}>
         <ListItem
           leftAvatar={
@@ -280,8 +278,10 @@ class CampaignPage extends Component {
             <Tab
              // value={'1'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
-               <div style={{overflow: 'none', backgroundColor: muiTheme.palette.canvasColor}}>
-                 <ReactGridLayout/> 
+               <div style={{overflow: 'none', backgroundColor: muiTheme.palette.canvasColor}} ref={(field) => { this.grid = field; }}>
+                 <ReactGridLayout>
+                  //{this.renderGrid(assets)}
+                  </ReactGridLayout> 
               </div>
             </Tab>
             <Tab
@@ -294,11 +294,25 @@ class CampaignPage extends Component {
             </Tab>
             <Tab
             //  value={'3'}
-              icon={<FontIcon className="material-icons">add</FontIcon>}>
+              icon={<FontIcon className="material-icons">list</FontIcon>}>
                <div style={{overflow: 'none', backgroundColor: muiTheme.palette.convasColor}}>
                  <List  id='test' style={{height: '100%'}} ref={(field) => { this.list = field; }}>
                     {this.renderList(assets)}
                 </List>
+              </div>
+            </Tab>
+            <Tab
+            //  value={'3'}
+              icon={<FontIcon className="material-icons">cast</FontIcon>}>
+               <div style={{overflow: 'none', backgroundColor: muiTheme.palette.convasColor}}>
+             
+              </div>
+            </Tab>
+            <Tab
+            //  value={'3'}
+              icon={<FontIcon className="material-icons">add</FontIcon>}>
+               <div style={{overflow: 'none', backgroundColor: muiTheme.palette.convasColor}}>
+           
               </div>
             </Tab>
           </Tabs>
