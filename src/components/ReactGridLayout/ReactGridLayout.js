@@ -128,36 +128,36 @@ class ReactGridLayout extends Component {
 
 
 
-  renderGrid(assets) {
-    const {history, grid, asset} =this.props;
+  // renderGrid(assets) {
+  //   const {history, grid, asset} =this.props;
 
-        return _.map(_.range(this.props.assets), (i) => {
+  //       return _.map(_.range(this.props.assets), (i) => {
 
-          return (
-          <div key={i}>
-              <GridItem
-                 leftAvatar={
-                   <Avatar
-                     src={asset.val.photoURL}
-                     icon={
-                      <FontIcon className="material-icons">
-                        add_circle
-                      </FontIcon>
-                     }
-                    />
-                  }
-                  key={i}
-                  primaryText={asset.val.name}
-                  secondaryText={asset.val.asset_slug}
-                  onClick={()=>{history.push(`/assets/edit/${asset.key}`)}}
-                  id={i}
-                />
-            </div>
-         )
-       }
-      );
+  //         return (
+  //         <div key={i}>
+  //             <GridItem
+  //                leftAvatar={
+  //                  <Avatar
+  //                    src={asset.val.photoURL}
+  //                    icon={
+  //                     <FontIcon className="material-icons">
+  //                       add_circle
+  //                     </FontIcon>
+  //                    }
+  //                   />
+  //                 }
+  //                 key={i}
+  //                 primaryText={asset.val.name}
+  //                 secondaryText={asset.val.asset_slug}
+  //                 onClick={()=>{history.push(`/assets/edit/${asset.key}`)}}
+  //                 id={i}
+  //               />
+  //           </div>
+  //        )
+  //      }
+  //     );
   
-  }
+  // }
   
 
   ////renderGrid(widgets)
@@ -300,41 +300,7 @@ class ReactGridLayout extends Component {
                     {...this.props}
                     //ref="grid"
                     >
-                    <div key={1}>
-                    {assetData.map((card) => (
-                      <Card 
-                          style={{overflow: 'none', backgroundColor:muiTheme.palette.primary2Color}}
-                          key={card.uid}
-                          // actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
-                          // leftAvatar={
-                          //     <Avatar
-                          //       src={asset.val.photoURL}
-                          //       alt="arc"
-                          //       icon={
-                          //         <FontIcon className="material-icons">
-                          //           add_circle
-                          //         </FontIcon>
-                          //       }
-                          //     />
-                       >
-                        <CardHeader
-                          title={card.title}
-                          subtitle={card.subtitle}
-                          actAsExpander={true}
-                          showExpandableButton={true}
-                      />
-                         <CardText expandable={true}>
-                          asset_description
-                         </CardText>     
-
-                        <CardActions expandable={true}>
-                          <FlatButton label="Action1" />
-                          <FlatButton label="Action2" />
-                        </CardActions>
-                      </Card> 
-                      ))}
-                  </div>
-                </ResponsiveReactGridLayout>
+                  </ResponsiveReactGridLayout>
               </div>
 
 
@@ -364,7 +330,7 @@ class ReactGridLayout extends Component {
   }
  };
  ReactGridLayout.propTypes = {
-    onLayoutChange: PropTypes.func.isRequired,
+    onLayoutChange: PropTypes.func,
     assets: PropTypes.array.isRequired,
     history: PropTypes.object,
     reactGridLayout: PropTypes.object,

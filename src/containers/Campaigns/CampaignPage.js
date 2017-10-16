@@ -32,6 +32,9 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 
+import { WidgetFactories } from '../../containers/Widgets';
+
+
 //attempt at doing the campaign page path campaign name thing 
 const path='/campaigns';
 
@@ -57,7 +60,7 @@ let layoutToSave=undefined;
 
 class CampaignPage extends Component {
 
-    componentDidMount() {
+     componentDidMount() {
       const { watchList, firebaseApp, auth, uid, path  }=this.props;
      
       let ref=firebaseApp.database().ref('assets')
@@ -83,132 +86,40 @@ class CampaignPage extends Component {
   }
 
 
-  // //## below references the layouts. what about the path???? Maybe this goes below (its copied here)
+  renderGridList(assets) {
+    const {history, currentCampaignUid, list} =this.props;
 
-    // const { watchList, firebaseApp, auth, uid, path  }=this.props;
+  //const currentCampaignUid=key;
 
-    // let layoutRef=firebaseApp.database().ref('layouts')
-    //     .orderByChild('currentCampaignUid')
-    //     .equalTo('-KvecdzKQJ6qlr6U79Xc')
-    //    // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
-    //     .limitToFirst(20);
+    if(assets===undefined){
+      return <div></div>
+    }
 
-    //     watchList(layoutRef);
-    //   }
+    return _.map(assets, (asset, index) => {
 
-
-
-    // handleTabActive = (value) => {
-    //   const { history, uid, firebaseApp } = this.props
-    //   let key=firebaseApp.database().ref(`/campaign_tabs/${uid}/`).push().key
-
-    //   history.push(`${path}/${key}`)
-    // }
-
-
-
- // // ## This renders the grid layout assets ( which should take account of which assets) 
- renderGrid(assets) {
-   const {history, currentCampaignUid, grid, GridItem} =this.props;
-
- //const currentCampaignUid=key;
-
-   if(assets===undefined){
-     return <div></div>
-     alert('Assets were undef')
-   }
-
-   return _.map(assets, (asset, index) => {
-
-     return <div key={index}>
-       <Card
-         leftAvatar={
-           <Avatar
-             src={asset.val.photoURL}
-             icon={
-               <FontIcon className="material-icons">
-                 add_circle
-               </FontIcon>
-             }
-           />
-         }
-         key={index}
-         primaryText={asset.val.asset_name}
-         secondaryText={asset.val.asset_slug}
-         id={index}
-       />
-        
-       <Divider inset={true}/>
-     </div>
-   });
- }
-
- // // ## this renders the layout of the grid items, within react grid layout. 
- // // ## It includes the # of Grid Items, but not the content
- // // ## Maybe all of the layout renders and stuff goes in the Container RGL 
-
- // renderGridLayout(layout)
-  // const {history, currentCampaignUid, reactGridLayout, ReactGridLayout} =this.props;
-
-  // //const currentCampaignUid=key;
-  // const { watchList, firebaseApp, auth, uid, path  }=this.props;
-
-// // ## this gets the layout for the current campaign from the firebase 
-  // let layoutRef=firebaseApp.database().ref('layouts')
-  //     .orderByChild('currentCampaignUid')
-  //     .equalTo('-KvecdzKQJ6qlr6U79Xc');
-  //    // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
-  //     
-
-  //     watchList(layoutRef);
-  //   }
-// // ## if the firebase has no layouts availible 
-
-  //   if(layouts===undefined){
-  //     return <div></div>
-  //   }
-// // ## This returns the layout. 
-
-  //   return _.map(assets, (asset, index, layout) => {
-  //     return <div key={index}>
-  //       <ReactGridLayout
-  //         {layout.uid}
-  //       />
-  //     </div>
-  //   });
-  // }
-
-// //## this handles the layout change.  
-
-  // handleLayoutChange = (layout) => {
-  //     const {auth, firebaseApp, layout, onLayoutChange, history, setPersistentValue} =this.props;
-  //     const key = layout.key;
-  //     const layoutValues = layout.val;
-  //     const userCampaignsRef = firebaseApp.database().ref(`/campaigns/${key}`);
-  //     const layoutData = {
-  //      ...values
-  //     };
-
-  //     userCampaignsRef.update({...layoutData});
-
-  //     if (true) {
-  //     setOnLayoutChange{'on_layout_change', true}
-  // // ## updates the layout in the firebase   
-
-  //      firebaseApp.database().ref.push(`${key}`);
-
-  //     } else {
-  //     }
-  //   }
-  // // ## Eventually... 
-  // // handleAddWidget
-  // // handleAddAsset
-  // // handleChangeWidgetSize 
-
-
-  // }
-
-
+      return <div key={index}>
+        <ListItem
+          leftAvatar={
+            <Avatar
+              src={asset.val.photoURL}
+              alt="arc"
+              icon={
+                <FontIcon className="material-icons">
+                  add_circle
+                </FontIcon>
+              }
+            />
+          }
+          key={index}
+          primaryText={asset.val.asset_name}
+          secondaryText={asset.val.asset_slug}
+          id={index}
+        />
+         
+        <Divider inset={true}/>
+      </div>
+    });
+  }
 
 
   renderList(assets) {
@@ -263,8 +174,6 @@ class CampaignPage extends Component {
           } =this.props;
 
 
-
-
     return (
       <Activity
         isLoading={assets===undefined}
@@ -279,8 +188,8 @@ class CampaignPage extends Component {
              // value={'1'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
                <div style={{overflow: 'none', backgroundColor: muiTheme.palette.canvasColor}} ref={(field) => { this.grid = field; }}>
-                 <ReactGridLayout>
-                  //{this.renderGrid(assets)}
+                 <ReactGridLayout  {...this.props.reactGridLayout}>
+                   {this.renderGridList(assets)}
                   </ReactGridLayout> 
               </div>
             </Tab>
@@ -338,7 +247,9 @@ CampaignPage.propTypes = {
   auth: PropTypes.object.isRequired,
   isGranted: PropTypes.func.isRequired,
   muiTheme: PropTypes.object.isRequired,
+  widgets: PropTypes.array,
   onLayoutChange: PropTypes.func.isRequired,
+  reactGridLayout: PropTypes.object.isRequired,
  
 };
 
