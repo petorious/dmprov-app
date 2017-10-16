@@ -64,7 +64,7 @@ class UserRoles extends Component {
         rightToggle={
           <Toggle
             toggled={userRoles[key]===true}
-            onToggle={(e, isInputChecked)=>{this.hanldeRoleToggleChange(e, isInputChecked, key)}}
+            onToggle={(e, isInputChecked)=>{this.handleRoleToggleChange(e, isInputChecked, key)}}
           />
         }
         key={key}

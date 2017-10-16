@@ -27,7 +27,6 @@ const AsyncMyAccount = MyLoadable({loader: () => import('../../containers/MyAcco
 
 const AsyncPredefinedChatMessages = MyLoadable({loader: () => import('../../containers/PredefinedChatMessages/PredefinedChatMessages')});
 
-
 const AsyncTask = MyLoadable({loader: () => import('../../containers/Tasks/Task')});
 const AsyncTasks = MyLoadable({loader: () => import('../../containers/Tasks/Tasks')}, [AsyncTask]);
 
@@ -40,6 +39,16 @@ const AsyncChats = MyLoadable({loader: () => import('../../containers/Chats/Chat
 
 const AsyncCompany = MyLoadable({loader: () => import('../../containers/Companies/Company')});
 const AsyncCompanies = MyLoadable({loader: () => import('../../containers/Companies/Companies')}, [AsyncCompany]);
+
+const AsyncCampaign = MyLoadable({loader: () => import('../../containers/Campaigns/Campaign')});
+const AsyncCampaigns = MyLoadable({loader: () => import('../../containers/Campaigns/Campaigns')}, [AsyncCampaign]);
+
+const AsyncAsset = MyLoadable({loader: () => import('../../containers/Assets/Asset')});
+const AsyncAssets = MyLoadable({loader: () => import('../../containers/Assets/Assets')}, [AsyncAsset]);
+
+
+
+const AsyncCampaignPage= MyLoadable({loader: () => import('../../containers/Campaigns/CampaignPage')},);
 
 const AsyncUser = MyLoadable({loader: () => import('../../containers/Users/User')});
 const AsyncUsers = MyLoadable({loader: () => import('../../containers/Users/Users')}, [AsyncUser]);
@@ -54,8 +63,8 @@ const Routes = (props, context) => {
       <RestrictedRoute type='private' path="/" exact component={AsyncDashboard} />
       <RestrictedRoute type='private' path="/dashboard" exact component={AsyncDashboard} />
 
+      
       <RestrictedRoute type='private' path="/loading" exact component={LoadingComponent} />
-
       <RestrictedRoute type='private' path="/public_chats" exact component={AsyncPublicChats} />
 
       <RestrictedRoute type='private' path="/tasks" exact component={AsyncTasks} />
@@ -69,6 +78,16 @@ const Routes = (props, context) => {
       <RestrictedRoute type='private' path="/companies" exact component={AsyncCompanies} />
       <RestrictedRoute type='private' path="/companies/edit/:uid" exact component={AsyncCompany} />
       <RestrictedRoute type='private' path="/companies/create" exact component={AsyncCompany} />
+
+      <RestrictedRoute type='private' path="/campaigns" exact component={AsyncCampaigns} />
+      <RestrictedRoute type='private' path="/campaigns/edit/:uid" exact component={AsyncCampaign} />
+      <RestrictedRoute type='private' path="/campaigns/create" exact component={AsyncCampaign} />
+
+      <RestrictedRoute type='private' path="/assets" exact component={AsyncAssets} />
+      <RestrictedRoute type='private' path="/assets/edit/:uid" exact component={AsyncAsset} />
+      <RestrictedRoute type='private' path="/assets/create" exact component={AsyncAsset} />
+
+      <RestrictedRoute type='private' path="/campaigns/:uid" exact component={AsyncCampaignPage} />
 
       <RestrictedRoute type='private' path="/predefined_chat_messages" exact component={AsyncPredefinedChatMessages} />
 

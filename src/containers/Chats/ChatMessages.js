@@ -132,7 +132,7 @@ class ChatMessages extends Component {
 
     return messages.map((row, i) => {
       const values=row.val
-      //const key=row.key
+      const key=row.key
 
       if (values.created == null) {
         return undefined
@@ -472,9 +472,9 @@ ChatMessages.propTypes = {
   auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state, ownPops) => {
+const mapStateToProps = (state, ownProps) => {
   const { lists, auth, browser, simpleValues } = state;
-  const { uid } = ownPops;
+  const { uid } = ownProps;
 
   const path=`user_chat_messages/${auth.uid}/${uid}`
   const chatMessageMenuOpen = simpleValues['chatMessageMenuOpen']===true

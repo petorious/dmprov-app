@@ -2,21 +2,15 @@ import {addLocaleData} from 'react-intl';
 import en_messages from './en';
 import de_messages from './de';
 import es_messages from './es';
-import it_messages from './it';
 import ru_messages from './ru';
 import pl_messages from './pl';
-import pt_messages from './pt';
 import sv_messages from './sv';
-import fr_messages from './fr';
 import en from 'react-intl/locale-data/en';
 import de from 'react-intl/locale-data/de';
 import es from 'react-intl/locale-data/es';
-import it from 'react-intl/locale-data/it';
 import sv from 'react-intl/locale-data/sv';
 import pl from 'react-intl/locale-data/de';
-import pt from 'react-intl/locale-data/pt';
 import ru from 'react-intl/locale-data/en';
-import fr from 'react-intl/locale-data/fr';
 
 
 var areIntlLocalesSupported = require('intl-locales-supported');
@@ -61,11 +55,6 @@ const locales = [
     data: es
   },
    {
-    locale: 'pt',
-    messages: pt_messages,
-    data: pt
-  },
-   {
     locale: 'pl',
     messages: pl_messages,
     data: pl
@@ -76,16 +65,6 @@ const locales = [
     data: sv
   },
    {
-    locale: 'it',
-    messages: it_messages,
-    data: it
-  },
-  {
-    locale: 'fr',
-    messages: fr_messages,
-    data: fr
-  },
-    {
     locale: 'ru',
     messages: ru_messages,
     data: ru
