@@ -53,6 +53,8 @@ class Asset extends Component {
       created: firebase.database.ServerValue.TIMESTAMP ,
         userId: auth.uid,
         authorUid: auth.uid,
+        sizeClass: 'standard',
+        dataGrid: {w: 3, h: 1, x: 0, y: 0},
         currentCampaignUid: persistentValues['current_campaign_uid']?persistentValues['current_campaign_uid']:undefined,
       ...values
     }

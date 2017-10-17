@@ -53,6 +53,10 @@ const styles = {
     margin: 5,
     textAlign: 'center',
     display: 'inline-block',
+  },
+  card:{
+    backgroundColor: 'muiTheme.palette.primary2Color',
+    color: 'muiTheme.palette.alternateTextColor',
   }
 };
 let layoutToSave=undefined;
@@ -60,64 +64,154 @@ let layoutToSave=undefined;
 
 class CampaignPage extends Component {
 
-     componentDidMount() {
-      const { watchList, firebaseApp, auth, uid, path  }=this.props;
-     
-      let ref=firebaseApp.database().ref('assets')
-      .orderByChild('currentCampaignUid')
-      .equalTo('-KvecdzKQJ6qlr6U79Xc')
-     // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
-      .limitToFirst(20);
-      watchList(ref);
-      this.initLayout(this.props);
-    }
-
-    initLayout = (props) => {
-      const {watchList, firebaseApp, path}=props;
-
-       let layoutRef=firebaseApp.database().ref('layouts')
-       .orderByChild('currentCampaignUid')
-       .equalTo('-KvecdzKQJ6qlr6U79Xc')
-      // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
-       .limitToFirst(1);
-       watchList(layoutRef);
-       watchList('layouts');
-
+   componentDidMount() {
+    const { watchList, firebaseApp, auth, uid, path  }=this.props;
+   
+    let ref=firebaseApp.database().ref('assets')
+    .orderByChild('currentCampaignUid')
+    .equalTo('-KvecdzKQJ6qlr6U79Xc')
+   // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
+    .limitToFirst(20);
+    watchList(ref);
+    this.props.generateLayout;
   }
 
+  generateLayout( firebaseApp, auth, uid, persistentValues, current_campaign_uid) {
+    
+    const {layout} = this.props;
 
-  renderGridList(assets) {
-    const {history, currentCampaignUid, list} =this.props;
+    return {
 
-  //const currentCampaignUid=key;
+        created:firebaseApp.database().ref().child('react_grid_layouts/${uid}').push({
+          layout
+        })
+    }
+ ;
+  }
 
+  onLayoutChange = (layout) => {
+    
+      const { firebaseApp, auth, uid, persistentValues, current_campaign_uid }=this.props;
+
+
+          return {
+            updated:firebaseApp.database().ref().child(`react_grid_layouts/${uid}`),
+            ...layout
+          }
+    };
+
+  renderGrid(assets) {
+    const {history, currentCampaignUid, list, muiTheme, card} =this.props;
+
+  
     if(assets===undefined){
       return <div></div>
     }
 
     return _.map(assets, (asset, index) => {
 
-      return <div key={index}>
-        <ListItem
-          leftAvatar={
-            <Avatar
-              src={asset.val.photoURL}
-              alt="arc"
-              icon={
-                <FontIcon className="material-icons">
-                  add_circle
-                </FontIcon>
-              }
-            />
-          }
-          key={index}
-          primaryText={asset.val.asset_name}
-          secondaryText={asset.val.asset_slug}
-          id={index}
-        />
+      if(asset.val.sizeClass==='standard'){
+        
+        return <div key={index}
+            data-grid={asset.val.dataGrid}
+        >
+          <ListItem
+            leftAvatar={
+              <Avatar
+                src={asset.val.photoURL}
+                alt="arc"
+                icon={
+                  <FontIcon className="material-icons">
+                    add_circle
+                  </FontIcon>
+                }
+              />
+            }
+            style={{overflow: 'none', backgroundColor: 'black'}}
+            key={index}
+            primaryText={asset.val.asset_name}
+            secondaryText={asset.val.asset_slug}
+            id={index}
+            rightIconButton={
+                   <IconButton>
+                     <FontIcon className="material-icons" color={'white'}>{'expand_more'}</FontIcon>
+                   </IconButton>
+                 }
+          />  
+        </div>
+      }
+      if(asset.val.sizeClass==='expanded')
+        return <div key={index}
+          data-grid={asset.val.dataGrid}
+          style={{overflow: 'none', backgroundColor: 'black'}}
+        >
+          <ListItem
+            leftAvatar={
+              <Avatar
+                src={asset.val.photoURL}
+                alt="arc"
+                icon={
+                  <FontIcon className="material-icons">
+                    add_circle
+                  </FontIcon>
+                }
+              />
+            }
+            style={{ backgroundColor: 'black'}}
+
+            key={index}
+            primaryText={asset.val.asset_name}
+            secondaryText={asset.val.asset_slug}
+            id={index}
+            initiallyOpen={true}
+            nestedItems={[
+                     <ListItem
+                       value={2}
+                       style={{backgroundColor: 'black'}}
+                       secondaryText={asset.val.asset_description}
+                       secondaryTextLines={2}
+                       secondaryTextSize={'6'}
+                                             
+                     />,
+                   ]}
+            rightIconButton={
+                   <IconButton>
+                     <FontIcon className="material-icons" color={'white'}>{'expand_more'}</FontIcon>
+                   </IconButton>
+                 }
+          />  
          
-        <Divider inset={true}/>
-      </div>
+
+          
+        </div>
+
+      if(asset.val.sizeClass==='thumbnail')
+        return <div key={index}
+            data-grid={asset.val.dataGrid}
+        >
+          
+          <ListItem
+            leftAvatar={
+              <Avatar
+                src={asset.val.photoURL}
+                alt="arc"
+                icon={
+                  <FontIcon className="material-icons">
+                    add_circle
+                  </FontIcon>
+                }
+              />
+            }
+            style={{overflow: 'none', backgroundColor: 'black', primaryTextColor: 'black'}}
+            key={index}
+            id={index}
+            primaryText={".     "}
+            secondaryText={"  ."}
+           />  
+           <Divider/>
+        </div>
+
+
     });
   }
 
@@ -158,7 +252,14 @@ class CampaignPage extends Component {
   }
 
 
+
+
+
   render(){
+
+
+
+
     const { intl,
             browser,
             assets,
@@ -169,9 +270,13 @@ class CampaignPage extends Component {
             isGranted, 
             campaignDisplayName, 
             currentCampaignUid, 
+            reactGridLayout,
+            onLayoutChange,
             uid, 
             key,
           } =this.props;
+
+    
 
 
     return (
@@ -188,9 +293,22 @@ class CampaignPage extends Component {
              // value={'1'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
                <div style={{overflow: 'none', backgroundColor: muiTheme.palette.canvasColor}} ref={(field) => { this.grid = field; }}>
-                 <ReactGridLayout  {...this.props.reactGridLayout}>
-                   {this.renderGridList(assets)}
-                  </ReactGridLayout> 
+                 <ResponsiveReactGridLayout 
+                  isDraggable={browser.greaterThan.small}
+                  isResizable={browser.greaterThan.small}
+                  onLayoutChange={onLayoutChange}
+                  className="layout"
+                 // layouts={layouts}
+                 // autoSize={true}
+                  verticalCompact={false}
+                  rowHeight={70}
+                  breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
+                  cols={{lg: 18, md: 15, sm: 9, xs: 6, xxs: 3}}
+                  ref="grid"
+                  {...this.props}
+                 >
+                   {this.renderGrid(assets)}
+                  </ResponsiveReactGridLayout> 
               </div>
             </Tab>
             <Tab
