@@ -21,7 +21,7 @@ class UserRoles extends Component {
     this.props.watchList('roles');
   }
 
-  hanldeRoleToggleChange = (e, isInputChecked, key) => {
+  handleRoleToggleChange = (e, isInputChecked, key) => {
     const { firebaseApp, match } = this.props
     const uid=match.params.uid
 

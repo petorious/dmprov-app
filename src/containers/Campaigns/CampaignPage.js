@@ -27,15 +27,17 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {Menu} from 'material-ui/Menu';
 import Paper from 'material-ui/Paper';
 import {GridList, GridTile} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
+
 
 import { WidgetFactories } from '../../containers/Widgets';
 
 
-//attempt at doing the campaign page path campaign name thing 
 const path='/campaigns';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -57,7 +59,15 @@ const styles = {
   card:{
     backgroundColor: 'muiTheme.palette.primary2Color',
     color: 'muiTheme.palette.alternateTextColor',
-  }
+  },
+  paper: {
+      display: 'inline-block',
+      float: 'left',
+      margin: '16px 32px 16px 0',
+  },
+  
+  
+  
 };
 let layoutToSave=undefined;
 
@@ -73,10 +83,10 @@ class CampaignPage extends Component {
    // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
     .limitToFirst(20);
     watchList(ref);
-    this.props.generateLayout;
+    this.props.initLayout;
   }
 
-  generateLayout( firebaseApp, auth, uid, persistentValues, current_campaign_uid) {
+  initLayout( firebaseApp, auth, uid, persistentValues, current_campaign_uid) {
     
     const {layout} = this.props;
 
@@ -100,6 +110,28 @@ class CampaignPage extends Component {
           }
     };
 
+  onSizeChangeExpand = (assets, key) => {
+    const { firebaseApp, match, simpleValues } = this.props;
+        const uid=match.params.uid;
+
+        return {
+          updated:firebaseApp.database().ref().child(`/assets/${key}/sizeClass/`).set('expanded')
+        
+          }
+      }
+  
+  onSizeChangeShrink = (assets, key) => {
+    const { firebaseApp, match, simpleValues } = this.props;
+            const uid=match.params.uid;
+
+        return{
+          updated:firebaseApp.database().ref().child(`/assets/${key}/sizeClass/`).set('standard')
+        }
+
+      }
+  
+
+
   renderGrid(assets) {
     const {history, currentCampaignUid, list, muiTheme, card} =this.props;
 
@@ -116,6 +148,7 @@ class CampaignPage extends Component {
             data-grid={asset.val.dataGrid}
         >
           <ListItem
+            onDoubleClick={()=>{history.push(`/assets/edit/${asset.key}`)}}
             leftAvatar={
               <Avatar
                 src={asset.val.photoURL}
@@ -133,9 +166,50 @@ class CampaignPage extends Component {
             secondaryText={asset.val.asset_slug}
             id={index}
             rightIconButton={
-                   <IconButton>
-                     <FontIcon className="material-icons" color={'white'}>{'expand_more'}</FontIcon>
-                   </IconButton>
+                   <IconMenu
+                       iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                       anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                       targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                     >
+                       
+
+                       <MenuItem
+                         primaryText="Size"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Standard" onClick={this.props.onSizeChangeShrink}/>,
+                           <MenuItem primaryText="Expanded" onClick={this.props.onSizeChangeExpand}/>,
+                           <MenuItem primaryText="Thumbnail" />,
+                         ]}
+                       />
+                       <MenuItem
+                         primaryText="View"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Details" />,
+                           <MenuItem primaryText="Stats" />,
+                           <MenuItem primaryText="Images" />,
+                           <MenuItem primaryText="Tags" />,
+                           <MenuItem primaryText="Attachements" />,
+                         ]}
+                       />
+                       <MenuItem
+                         primaryText="Copy & Paste"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Cut" />,
+                           <MenuItem primaryText="Copy" />,
+                           <Divider />,
+                           <MenuItem primaryText="Paste" />,
+                         ]}
+                       />
+                       <MenuItem primaryText="Anchor" />
+                       <Divider />
+                       <MenuItem primaryText="Archive" />
+                       <Divider />
+                       <MenuItem value="Del" primaryText="Delete" />
+
+                     </IconMenu>
                  }
           />  
         </div>
@@ -164,23 +238,62 @@ class CampaignPage extends Component {
             secondaryText={asset.val.asset_slug}
             id={index}
             initiallyOpen={true}
-            nestedItems={[
-                     <ListItem
-                       value={2}
-                       style={{backgroundColor: 'black'}}
-                       secondaryText={asset.val.asset_description}
-                       secondaryTextLines={2}
-                       secondaryTextSize={'6'}
-                                             
-                     />,
-                   ]}
+            
             rightIconButton={
-                   <IconButton>
-                     <FontIcon className="material-icons" color={'white'}>{'expand_more'}</FontIcon>
-                   </IconButton>
+                   <IconMenu
+                       iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                       anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                       targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                     >
+                       
+
+                       <MenuItem
+                         primaryText="Size"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Standard" onClick={this.props.onSizeChangeShrink}/>,
+                           <MenuItem primaryText="Expanded" onClick={this.props.onSizeChangeExpand}/>,
+                           <MenuItem primaryText="Thumbnail" />,
+                         ]}
+                       />
+                       <MenuItem
+                         primaryText="View"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Details" />,
+                           <MenuItem primaryText="Stats" />,
+                           <MenuItem primaryText="Images" />,
+                           <MenuItem primaryText="Tags" />,
+                           <MenuItem primaryText="Attachements" />,
+                         ]}
+                       />
+                       <MenuItem
+                         primaryText="Copy & Paste"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Cut" />,
+                           <MenuItem primaryText="Copy" />,
+                           <Divider />,
+                           <MenuItem primaryText="Paste" />,
+                         ]}
+                       />
+                       <MenuItem primaryText="Anchor" />
+                       <Divider />
+                       <MenuItem primaryText="Archive" />
+                       <Divider />
+                       <MenuItem value="Del" primaryText="Delete" />
+
+                     </IconMenu>
                  }
           />  
-         
+                  <div style={ { display: 'flex'} }>
+                    <Paper style={ { display: 'inline-block', float: 'center',  margin: '8px 8px 8px 8px',} }>
+                     <font color="grey">{asset.val.asset_description}
+                     </font>
+                     </Paper>
+                                       
+                   </div>
+                    
 
           
         </div>
@@ -191,6 +304,7 @@ class CampaignPage extends Component {
         >
           
           <ListItem
+
             leftAvatar={
               <Avatar
                 src={asset.val.photoURL}
@@ -215,6 +329,26 @@ class CampaignPage extends Component {
     });
   }
 
+  renderTitle(campaigns){
+    const {history, currentCampaignUid, list} =this.props;
+  
+
+      return _.map(campaigns, (campaign, index) => {
+
+        return <div key={currentCampaignUid}
+        >
+          <ListItem
+            key={currentCampaignUid}
+            primaryText={campaign.val.asset_name}
+            id={currentCampaignUid}
+          />
+           
+          <Divider inset={true}/>
+        </div>
+      });
+    }
+
+
 
   renderList(assets) {
     const {history, currentCampaignUid, list} =this.props;
@@ -227,8 +361,10 @@ class CampaignPage extends Component {
 
     return _.map(assets, (asset, index) => {
 
-      return <div key={index}>
+      return <div key={index}
+      >
         <ListItem
+          onClick={()=>{history.push(`/assets/edit/${asset.key}`)}}
           leftAvatar={
             <Avatar
               src={asset.val.photoURL}
@@ -264,11 +400,12 @@ class CampaignPage extends Component {
             browser,
             assets,
             asset,
+            campaigns,
             index, 
             muiTheme, 
             history, 
             isGranted, 
-            campaignDisplayName, 
+            campaignPageName, 
             currentCampaignUid, 
             reactGridLayout,
             onLayoutChange,
@@ -283,7 +420,7 @@ class CampaignPage extends Component {
       <Activity
         isLoading={assets===undefined}
         containerStyle={{overflow:'hidden'}}
-        title={`${currentCampaignUid}`}
+        title={this.renderTitle}
         >
         <Scrollbar>
           <Tabs
@@ -314,10 +451,7 @@ class CampaignPage extends Component {
             <Tab
             //  value={'2'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
-              {
-               // editType==='roles' &&
-                //<UserRoles {...this.props}/>
-              }
+               <ReactGridLayout {...this.props}/>
             </Tab>
             <Tab
             //  value={'3'}
@@ -330,9 +464,8 @@ class CampaignPage extends Component {
             </Tab>
             <Tab
             //  value={'3'}
-              icon={<FontIcon className="material-icons">cast</FontIcon>}>
+              icon={<FontIcon className="material-icons">screen_share</FontIcon>}>
                <div style={{overflow: 'none', backgroundColor: muiTheme.palette.convasColor}}>
-             
               </div>
             </Tab>
             <Tab
@@ -361,6 +494,7 @@ class CampaignPage extends Component {
 
 CampaignPage.propTypes = {
   assets: PropTypes.array.isRequired,
+  campaigns: PropTypes.string,
   history: PropTypes.object,
   auth: PropTypes.object.isRequired,
   isGranted: PropTypes.func.isRequired,
@@ -372,35 +506,26 @@ CampaignPage.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { auth, browser, lists, persistentValues, onLayoutChange, grids} = state;
+  const { auth, browser, firebaseApp, lists, persistentValues, onLayoutChange, grids} = state;
   const { match } = ownProps;
   const uid=match.params.uid;
   const currentCampaignUid=persistentValues['current_campaign_uid']?persistentValues['current_campaign_uid']:undefined;
 
-  // const campaignPageName= 
-  // get the value from the {campaign key} from the firebase 
+
 
   const campaignPagePath=`campaigns/${auth.uid}`;
   const campaigns=lists[campaignPagePath]?lists[campaignPagePath]:[];
   const layoutsPath=`layouts/${auth.uid}`;
   const layouts=grids[layoutsPath]?grids[layoutsPath]:[];
 
-  let campaignDisplayName=''; 
-   
-  campaigns.map(campaign=>{
-     if(campaign.key===uid){
-       campaignDisplayName=campaign.val.campaign_name;
-     }
-      return campaign;
-    })
+
 
   return {
     assets: lists.assets,
     auth,
     uid,
     layouts: grids[layoutsPath],
-    campaigns,
-    campaignDisplayName,
+    campaigns: lists.campaigns,
     campaignPagePath,
     layoutsPath,
     currentCampaignUid,
