@@ -53,7 +53,7 @@ const enhancer = composeEnhancers(
 store = createStore(reducers, initState, enhancer);
 
   try{
-    persistStore(store, {blacklist:['auth', 'form', 'connection', 'grids', 'initialization', 'messaging'] }, ()=>{});
+    persistStore(store, {blacklist:['auth', 'form', 'assets', 'connection', 'grids', 'initialization', 'messaging'] }, ()=>{});
   }catch(e){
 
   }

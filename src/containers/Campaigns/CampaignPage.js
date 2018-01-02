@@ -27,12 +27,17 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {Menu} from 'material-ui/Menu';
 import Paper from 'material-ui/Paper';
 import {GridList, GridTile} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 
-//attempt at doing the campaign page path campaign name thing 
+
+import { WidgetFactories } from '../../containers/Widgets';
+
+
 const path='/campaigns';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -50,164 +55,298 @@ const styles = {
     margin: 5,
     textAlign: 'center',
     display: 'inline-block',
-  }
+  },
+  card:{
+    backgroundColor: 'muiTheme.palette.primary2Color',
+    color: 'muiTheme.palette.alternateTextColor',
+  },
+  paper: {
+      display: 'inline-block',
+      float: 'left',
+      margin: '16px 32px 16px 0',
+  },
+  
+  
+  
 };
 let layoutToSave=undefined;
 
 
 class CampaignPage extends Component {
 
-    componentDidMount() {
-      const { watchList, firebaseApp, auth, uid, path  }=this.props;
-     
-      let ref=firebaseApp.database().ref('assets')
-      .orderByChild('currentCampaignUid')
-      .equalTo('-KvecdzKQJ6qlr6U79Xc')
-     // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
-      .limitToFirst(20);
-      watchList(ref);
-      this.initLayout(this.props);
-    }
-
-    initLayout = (props) => {
-      const {watchList, firebaseApp, path}=props;
-
-       let layoutRef=firebaseApp.database().ref('layouts')
-       .orderByChild('currentCampaignUid')
-       .equalTo('-KvecdzKQJ6qlr6U79Xc')
-      // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
-       .limitToFirst(1);
-       watchList(layoutRef);
-       watchList('layouts');
-
+   componentDidMount() {
+    const { watchList, firebaseApp, auth, uid, path  }=this.props;
+   
+    let ref=firebaseApp.database().ref('assets')
+    .orderByChild('currentCampaignUid')
+    .equalTo('-KvecdzKQJ6qlr6U79Xc')
+   // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
+    .limitToFirst(20);
+    watchList(ref);
+    this.props.initLayout;
   }
 
+  initLayout( firebaseApp, auth, uid, persistentValues, current_campaign_uid) {
+    
+    const {layout} = this.props;
 
-  // //## below references the layouts. what about the path???? Maybe this goes below (its copied here)
+    return {
 
-    // const { watchList, firebaseApp, auth, uid, path  }=this.props;
+        created:firebaseApp.database().ref().child('react_grid_layouts/${uid}').push({
+          layout
+        })
+    }
+ ;
+  }
 
-    // let layoutRef=firebaseApp.database().ref('layouts')
-    //     .orderByChild('currentCampaignUid')
-    //     .equalTo('-KvecdzKQJ6qlr6U79Xc')
-    //    // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
-    //     .limitToFirst(20);
-
-    //     watchList(layoutRef);
-    //   }
-
-
-
-    // handleTabActive = (value) => {
-    //   const { history, uid, firebaseApp } = this.props
-    //   let key=firebaseApp.database().ref(`/campaign_tabs/${uid}/`).push().key
-
-    //   history.push(`${path}/${key}`)
-    // }
+  onLayoutChange = (layout) => {
+    
+      const { firebaseApp, auth, uid, persistentValues, current_campaign_uid }=this.props;
 
 
+          return {
+            updated:firebaseApp.database().ref().child(`react_grid_layouts/${uid}`),
+            ...layout
+          }
+    };
 
- // // ## This renders the grid layout assets ( which should take account of which assets) 
- renderGrid(assets) {
-   const {history, currentCampaignUid, grid, GridItem} =this.props;
+  onSizeChangeExpand = (assets, key) => {
+    const { firebaseApp, match, simpleValues } = this.props;
+        const uid=match.params.uid;
 
- //const currentCampaignUid=key;
-
-   if(assets===undefined){
-     return <div></div>
-     alert('Assets were undef')
-   }
-
-   return _.map(assets, (asset, index) => {
-
-     return <div key={index}>
-       <Card
-         leftAvatar={
-           <Avatar
-             src={asset.val.photoURL}
-             icon={
-               <FontIcon className="material-icons">
-                 add_circle
-               </FontIcon>
-             }
-           />
-         }
-         key={index}
-         primaryText={asset.val.asset_name}
-         secondaryText={asset.val.asset_slug}
-         id={index}
-       />
+        return {
+          updated:firebaseApp.database().ref().child(`/assets/${key}/sizeClass/`).set('expanded')
         
-       <Divider inset={true}/>
-     </div>
-   });
- }
+          }
+      }
+  
+  onSizeChangeShrink = (assets, key) => {
+    const { firebaseApp, match, simpleValues } = this.props;
+            const uid=match.params.uid;
 
- // // ## this renders the layout of the grid items, within react grid layout. 
- // // ## It includes the # of Grid Items, but not the content
- // // ## Maybe all of the layout renders and stuff goes in the Container RGL 
+        return{
+          updated:firebaseApp.database().ref().child(`/assets/${key}/sizeClass/`).set('standard')
+        }
 
- // renderGridLayout(layout)
-  // const {history, currentCampaignUid, reactGridLayout, ReactGridLayout} =this.props;
-
-  // //const currentCampaignUid=key;
-  // const { watchList, firebaseApp, auth, uid, path  }=this.props;
-
-// // ## this gets the layout for the current campaign from the firebase 
-  // let layoutRef=firebaseApp.database().ref('layouts')
-  //     .orderByChild('currentCampaignUid')
-  //     .equalTo('-KvecdzKQJ6qlr6U79Xc');
-  //    // .equalTo('${auth.uid}') - doesnt work. object returns 'undefined'
-  //     
-
-  //     watchList(layoutRef);
-  //   }
-// // ## if the firebase has no layouts availible 
-
-  //   if(layouts===undefined){
-  //     return <div></div>
-  //   }
-// // ## This returns the layout. 
-
-  //   return _.map(assets, (asset, index, layout) => {
-  //     return <div key={index}>
-  //       <ReactGridLayout
-  //         {layout.uid}
-  //       />
-  //     </div>
-  //   });
-  // }
-
-// //## this handles the layout change.  
-
-  // handleLayoutChange = (layout) => {
-  //     const {auth, firebaseApp, layout, onLayoutChange, history, setPersistentValue} =this.props;
-  //     const key = layout.key;
-  //     const layoutValues = layout.val;
-  //     const userCampaignsRef = firebaseApp.database().ref(`/campaigns/${key}`);
-  //     const layoutData = {
-  //      ...values
-  //     };
-
-  //     userCampaignsRef.update({...layoutData});
-
-  //     if (true) {
-  //     setOnLayoutChange{'on_layout_change', true}
-  // // ## updates the layout in the firebase   
-
-  //      firebaseApp.database().ref.push(`${key}`);
-
-  //     } else {
-  //     }
-  //   }
-  // // ## Eventually... 
-  // // handleAddWidget
-  // // handleAddAsset
-  // // handleChangeWidgetSize 
+      }
+  
 
 
-  // }
+  renderGrid(assets) {
+    const {history, currentCampaignUid, list, muiTheme, card} =this.props;
 
+  
+    if(assets===undefined){
+      return <div></div>
+    }
+
+    return _.map(assets, (asset, index) => {
+
+      if(asset.val.sizeClass==='standard'){
+        
+        return <div key={index}
+            data-grid={asset.val.dataGrid}
+        >
+          <ListItem
+            onDoubleClick={()=>{history.push(`/assets/edit/${asset.key}`)}}
+            leftAvatar={
+              <Avatar
+                src={asset.val.photoURL}
+                alt="arc"
+                icon={
+                  <FontIcon className="material-icons">
+                    add_circle
+                  </FontIcon>
+                }
+              />
+            }
+            style={{overflow: 'none', backgroundColor: 'black'}}
+            key={index}
+            primaryText={asset.val.asset_name}
+            secondaryText={asset.val.asset_slug}
+            id={index}
+            rightIconButton={
+                   <IconMenu
+                       iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                       anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                       targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                     >
+                       
+
+                       <MenuItem
+                         primaryText="Size"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Standard" onClick={this.props.onSizeChangeShrink}/>,
+                           <MenuItem primaryText="Expanded" onClick={this.props.onSizeChangeExpand}/>,
+                           <MenuItem primaryText="Thumbnail" />,
+                         ]}
+                       />
+                       <MenuItem
+                         primaryText="View"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Details" />,
+                           <MenuItem primaryText="Stats" />,
+                           <MenuItem primaryText="Images" />,
+                           <MenuItem primaryText="Tags" />,
+                           <MenuItem primaryText="Attachements" />,
+                         ]}
+                       />
+                       <MenuItem
+                         primaryText="Copy & Paste"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Cut" />,
+                           <MenuItem primaryText="Copy" />,
+                           <Divider />,
+                           <MenuItem primaryText="Paste" />,
+                         ]}
+                       />
+                       <MenuItem primaryText="Anchor" />
+                       <Divider />
+                       <MenuItem primaryText="Archive" />
+                       <Divider />
+                       <MenuItem value="Del" primaryText="Delete" />
+
+                     </IconMenu>
+                 }
+          />  
+        </div>
+      }
+      if(asset.val.sizeClass==='expanded')
+        return <div key={index}
+          data-grid={asset.val.dataGrid}
+          style={{overflow: 'none', backgroundColor: 'black'}}
+        >
+          <ListItem
+            leftAvatar={
+              <Avatar
+                src={asset.val.photoURL}
+                alt="arc"
+                icon={
+                  <FontIcon className="material-icons">
+                    add_circle
+                  </FontIcon>
+                }
+              />
+            }
+            style={{ backgroundColor: 'black'}}
+
+            key={index}
+            primaryText={asset.val.asset_name}
+            secondaryText={asset.val.asset_slug}
+            id={index}
+            initiallyOpen={true}
+            
+            rightIconButton={
+                   <IconMenu
+                       iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                       anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                       targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                     >
+                       
+
+                       <MenuItem
+                         primaryText="Size"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Standard" onClick={this.props.onSizeChangeShrink}/>,
+                           <MenuItem primaryText="Expanded" onClick={this.props.onSizeChangeExpand}/>,
+                           <MenuItem primaryText="Thumbnail" />,
+                         ]}
+                       />
+                       <MenuItem
+                         primaryText="View"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Details" />,
+                           <MenuItem primaryText="Stats" />,
+                           <MenuItem primaryText="Images" />,
+                           <MenuItem primaryText="Tags" />,
+                           <MenuItem primaryText="Attachements" />,
+                         ]}
+                       />
+                       <MenuItem
+                         primaryText="Copy & Paste"
+                         rightIcon={<ArrowDropRight />}
+                         menuItems={[
+                           <MenuItem primaryText="Cut" />,
+                           <MenuItem primaryText="Copy" />,
+                           <Divider />,
+                           <MenuItem primaryText="Paste" />,
+                         ]}
+                       />
+                       <MenuItem primaryText="Anchor" />
+                       <Divider />
+                       <MenuItem primaryText="Archive" />
+                       <Divider />
+                       <MenuItem value="Del" primaryText="Delete" />
+
+                     </IconMenu>
+                 }
+          />  
+                  <div style={ { display: 'flex'} }>
+                    <Paper style={ { display: 'inline-block', float: 'center',  margin: '8px 8px 8px 8px',} }>
+                     <font color="grey">{asset.val.asset_description}
+                     </font>
+                     </Paper>
+                                       
+                   </div>
+                    
+
+          
+        </div>
+
+      if(asset.val.sizeClass==='thumbnail')
+        return <div key={index}
+            data-grid={asset.val.dataGrid}
+        >
+          
+          <ListItem
+
+            leftAvatar={
+              <Avatar
+                src={asset.val.photoURL}
+                alt="arc"
+                icon={
+                  <FontIcon className="material-icons">
+                    add_circle
+                  </FontIcon>
+                }
+              />
+            }
+            style={{overflow: 'none', backgroundColor: 'black', primaryTextColor: 'black'}}
+            key={index}
+            id={index}
+            primaryText={".     "}
+            secondaryText={"  ."}
+           />  
+           <Divider/>
+        </div>
+
+
+    });
+  }
+
+  renderTitle(campaigns){
+    const {history, currentCampaignUid, list} =this.props;
+  
+
+      return _.map(campaigns, (campaign, index) => {
+
+        return <div key={currentCampaignUid}
+        >
+          <ListItem
+            key={currentCampaignUid}
+            primaryText={campaign.val.asset_name}
+            id={currentCampaignUid}
+          />
+           
+          <Divider inset={true}/>
+        </div>
+      });
+    }
 
 
 
@@ -222,8 +361,10 @@ class CampaignPage extends Component {
 
     return _.map(assets, (asset, index) => {
 
-      return <div key={index}>
+      return <div key={index}
+      >
         <ListItem
+          onClick={()=>{history.push(`/assets/edit/${asset.key}`)}}
           leftAvatar={
             <Avatar
               src={asset.val.photoURL}
@@ -247,29 +388,39 @@ class CampaignPage extends Component {
   }
 
 
+
+
+
   render(){
+
+
+
+
     const { intl,
             browser,
             assets,
             asset,
+            campaigns,
             index, 
             muiTheme, 
             history, 
             isGranted, 
-            campaignDisplayName, 
+            campaignPageName, 
             currentCampaignUid, 
+            reactGridLayout,
+            onLayoutChange,
             uid, 
             key,
           } =this.props;
 
-
+    
 
 
     return (
       <Activity
         isLoading={assets===undefined}
         containerStyle={{overflow:'hidden'}}
-        title={`${currentCampaignUid}`}
+        title={this.renderTitle}
         >
         <Scrollbar>
           <Tabs
@@ -279,18 +430,28 @@ class CampaignPage extends Component {
              // value={'1'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
                <div style={{overflow: 'none', backgroundColor: muiTheme.palette.canvasColor}} ref={(field) => { this.grid = field; }}>
-                 <ReactGridLayout>
-                  //{this.renderGrid(assets)}
-                  </ReactGridLayout> 
+                 <ResponsiveReactGridLayout 
+                  isDraggable={browser.greaterThan.small}
+                  isResizable={browser.greaterThan.small}
+                  onLayoutChange={onLayoutChange}
+                  className="layout"
+                 // layouts={layouts}
+                 // autoSize={true}
+                  verticalCompact={false}
+                  rowHeight={70}
+                  breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
+                  cols={{lg: 18, md: 15, sm: 9, xs: 6, xxs: 3}}
+                  ref="grid"
+                  {...this.props}
+                 >
+                   {this.renderGrid(assets)}
+                  </ResponsiveReactGridLayout> 
               </div>
             </Tab>
             <Tab
             //  value={'2'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
-              {
-               // editType==='roles' &&
-                //<UserRoles {...this.props}/>
-              }
+               <ReactGridLayout {...this.props}/>
             </Tab>
             <Tab
             //  value={'3'}
@@ -303,9 +464,8 @@ class CampaignPage extends Component {
             </Tab>
             <Tab
             //  value={'3'}
-              icon={<FontIcon className="material-icons">cast</FontIcon>}>
+              icon={<FontIcon className="material-icons">screen_share</FontIcon>}>
                <div style={{overflow: 'none', backgroundColor: muiTheme.palette.convasColor}}>
-             
               </div>
             </Tab>
             <Tab
@@ -334,44 +494,38 @@ class CampaignPage extends Component {
 
 CampaignPage.propTypes = {
   assets: PropTypes.array.isRequired,
+  campaigns: PropTypes.string,
   history: PropTypes.object,
   auth: PropTypes.object.isRequired,
   isGranted: PropTypes.func.isRequired,
   muiTheme: PropTypes.object.isRequired,
+  widgets: PropTypes.array,
   onLayoutChange: PropTypes.func.isRequired,
+  reactGridLayout: PropTypes.object.isRequired,
  
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { auth, browser, lists, persistentValues, onLayoutChange, grids} = state;
+  const { auth, browser, firebaseApp, lists, persistentValues, onLayoutChange, grids} = state;
   const { match } = ownProps;
   const uid=match.params.uid;
   const currentCampaignUid=persistentValues['current_campaign_uid']?persistentValues['current_campaign_uid']:undefined;
 
-  // const campaignPageName= 
-  // get the value from the {campaign key} from the firebase 
+
 
   const campaignPagePath=`campaigns/${auth.uid}`;
   const campaigns=lists[campaignPagePath]?lists[campaignPagePath]:[];
   const layoutsPath=`layouts/${auth.uid}`;
   const layouts=grids[layoutsPath]?grids[layoutsPath]:[];
 
-  let campaignDisplayName=''; 
-   
-  campaigns.map(campaign=>{
-     if(campaign.key===uid){
-       campaignDisplayName=campaign.val.campaign_name;
-     }
-      return campaign;
-    })
+
 
   return {
     assets: lists.assets,
     auth,
     uid,
     layouts: grids[layoutsPath],
-    campaigns,
-    campaignDisplayName,
+    campaigns: lists.campaigns,
     campaignPagePath,
     layoutsPath,
     currentCampaignUid,
