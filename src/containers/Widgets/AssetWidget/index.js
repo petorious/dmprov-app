@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { GRID_UNIT } from '../../../constants';
-import Thumbnail from './thumbnail';
+//import Thumbnail from './thumbnail';
 
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
@@ -94,17 +94,17 @@ class AssetWidget extends Component {
     }
   }
 
-  renderThumbnail(id, assetType) {
-    return (
-      <Thumbnail
-        key={`${id}_thumb`}
-        id={id}
-        width={GRID_UNIT}
-        height={GRID_UNIT}
-        assetType={assetType}
-      />
-    );
-  }
+  // renderThumbnail(id, assetType) {
+  //   return (
+  //     // <Thumbnail
+  //     //   key={`${id}_thumb`}
+  //     //   id={id}
+  //     //   width={GRID_UNIT}
+  //     //   height={GRID_UNIT}
+  //     //   assetType={assetType}
+  //     // />
+  //   );
+  // }
 
   // render
 
