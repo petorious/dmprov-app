@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import { setSimpleValue } from '../../store/simpleValues/actions';
 import { setPersistentValue } from '../../store/persistentValues/actions';
 import {Responsive, WidthProvider, GridItem} from 'react-grid-layout';
-import ReactGridLayout from '../../components/ReactGridLayout/ReactGridLayout'
+//react grid layout import 
+import TarikReactGridLayout from '../../containers/ReactGridLayout/TarikReactGridLayout';
+
 import { onLayoutChange } from '../../store/grids/actions';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import { injectIntl } from 'react-intl';
@@ -33,7 +35,6 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
-
 
 import { WidgetFactories } from '../../containers/Widgets';
 
@@ -67,7 +68,6 @@ const styles = {
   },
   
   
-  
 };
 let layoutToSave=undefined;
 
@@ -86,233 +86,11 @@ class CampaignPage extends Component {
     this.props.initLayout;
   }
 
-  initLayout( firebaseApp, auth, uid, persistentValues, current_campaign_uid) {
-    
-    const {layout} = this.props;
-
-    return {
-
-        created:firebaseApp.database().ref().child('react_grid_layouts/${uid}').push({
-          layout
-        })
-    }
- 
-  }
-
-  onLayoutChange = (layout) => {
-    
-      const { firebaseApp, auth, uid, persistentValues, current_campaign_uid }=this.props;
-
-
-          return {
-            updated:firebaseApp.database().ref().child(`react_grid_layouts/${uid}`),
-            ...layout
-          }
-    };
-
-  onSizeChangeExpand = (asset, index) => {
-    const { firebaseApp, match, assets, simpleValues } = this.props;
-        const key= asset.key;
-        const uid=match.params.uid;
-        console.log("asset key", asset.key)
-        // return {
-        //   updated:firebaseApp.database().ref().child(`/asset/${asset.key}/sizeClass/`).set('expanded')
-        
-        //   }
-      }
-  
-  onSizeChangeShrink = (asset, key) => {
-    const { firebaseApp, match, simpleValues } = this.props;
-            const uid=match.params.uid;
-
-        return{
-          updated:firebaseApp.database().ref().child(`/assets/${asset.key}/sizeClass/`).set('standard')
-        }
-
-      }
-  
-
-
-  renderGrid(assets) {
-    const {history, currentCampaignUid, list, muiTheme, card} =this.props;
-
-  
-    if(assets===undefined){
-      return <div></div>
-    }
-
-    return _.map(assets, (asset, index) => {
-``
-      if(asset.val.sizeClass==='standard'){
-        
-        return <div key={index}
-            data-grid={asset.val.dataGrid}
-        >
-          <ListItem
-            onDoubleClick={()=>{history.push(`/assets/edit/${asset.key}`)}}
-            leftAvatar={
-              <Avatar
-                src={asset.val.photoURL}
-                alt="arc"
-                icon={
-                  <FontIcon className="material-icons">
-                    add_circle
-                  </FontIcon>
-                }
-              />
-            }
-            style={{overflow: 'none', backgroundColor: 'black'}}
-            key={index}
-            primaryText={asset.val.asset_name}
-            secondaryText={asset.val.asset_slug}
-            id={index}
-            rightIconButton={
-                   <IconMenu
-                       iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-                       anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                       targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                     >
-                       
-                       <MenuItem
-                         primaryText="Expand"
-                         onClick={this.onSizeChangeExpand(assets[index])}
-                
-                       />
-                       
-                       <MenuItem
-                         primaryText="Copy & Paste"
-                         rightIcon={<ArrowDropRight />}
-                         menuItems={[
-                           <MenuItem primaryText="Cut"  />,
-                           <MenuItem primaryText="Copy" />,
-                           <Divider />,
-                           <MenuItem primaryText="Paste" />,
-                         ]}
-                       />
-                       <MenuItem primaryText="Anchor" />
-                       <Divider />
-                       <MenuItem primaryText="Archive" />
-                       <Divider />
-                       <MenuItem value="Del" primaryText="Delete" />
-
-                     </IconMenu>
-                 }
-          />  
-        </div>
-      }
-      if(asset.val.sizeClass==='expanded')
-        return <div key={index}
-          data-grid={asset.val.dataGrid}
-          style={{overflow: 'none', backgroundColor: 'black'}}
-        >
-          <ListItem
-            leftAvatar={
-              <Avatar
-                src={asset.val.photoURL}
-                alt="arc"
-                icon={
-                  <FontIcon className="material-icons">
-                    add_circle
-                  </FontIcon>
-                }
-              />
-            }
-            style={{ backgroundColor: 'black'}}
-
-            key={index}
-            primaryText={asset.val.asset_name}
-            secondaryText={asset.val.asset_slug}
-            id={index}
-            initiallyOpen={true}
-            
-            rightIconButton={
-                   <IconMenu
-                       iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-                       anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                       targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                     >
-                       
-
-                       <MenuItem
-                         primaryText="Minimize"
-                         onClick={this.props.onSizeChangeShrink}
-                       
-                       />
-                    
-                       <MenuItem
-                         primaryText="Copy & Paste"
-                         rightIcon={<ArrowDropRight />}
-                         menuItems={[
-                           <MenuItem primaryText="Cut" />,
-                           <MenuItem primaryText="Copy" />,
-                           <Divider />,
-                           <MenuItem primaryText="Paste" />,
-                         ]}
-                       />
-                       <MenuItem primaryText="Anchor" />
-                       <Divider />
-                       <MenuItem primaryText="Archive" />
-                       <Divider />
-                       <MenuItem value="Del" primaryText="Delete" />
-
-                     </IconMenu>
-                 }
-          />  
-          <Tabs>
-            <Tab label="D">
-                  <div style={ { display: 'flex'} }>
-                    <Paper style={ { display: 'inline-block', float: 'center',  margin: '8px 8px 8px 8px',} }>
-                     <font color="grey">{asset.val.asset_description}
-                     </font>
-                     </Paper>
-                                       
-                   </div>
-              </Tab>
-
-              <Tab label='T'>
-
-              </Tab>
-              <Tab label='A'>
-
-              </Tab>
-              <Tab label='S'>
-
-              </Tab>
-
-            
-          </Tabs>
-                    
-
-          
-        </div>
-
-      
-          
-          
-
-
-    });
-  }
-
-  renderTitle(campaigns){
-    const {history, currentCampaignUid, list} =this.props;
-  
-
-      return _.map(campaigns, (campaign, index) => {
-
-        return <div key={currentCampaignUid}
-        >
-          <ListItem
-            key={currentCampaignUid}
-            primaryText={campaign.val.asset_name}
-            id={currentCampaignUid}
-          />
-           
-          <Divider inset={true}/>
-        </div>
-      });
-    }
-
+  createWidget = (widget) => {
+    const {history, widgets}=this.props;
+      console.log('Button Pressed');
+      ()=> {this.push( `/widgets/${widget.key}`)}
+  } 
 
 
   renderList(assets) {
@@ -353,11 +131,7 @@ class CampaignPage extends Component {
 
 
 
-
-
   render(){
-
-
 
 
     const { intl,
@@ -367,56 +141,44 @@ class CampaignPage extends Component {
             campaigns,
             index, 
             muiTheme, 
+            createWidget,
             history, 
             isGranted, 
             campaignPageName, 
             currentCampaignUid, 
             reactGridLayout,
-            onLayoutChange,
             uid, 
+            ref,
             key,
           } =this.props;
 
     
-
-
     return (
       <Activity
         isLoading={assets===undefined}
         containerStyle={{overflow:'hidden'}}
-        title={this.renderTitle}
-        >
+        title='Campaign'
+                >
         <Scrollbar>
           <Tabs
             //value={editType}
             onChange={this.handleTabActive}>
             <Tab
+            //  value={'2'}
+              icon={<FontIcon className="material-icons">tab</FontIcon>}>
+               <TarikReactGridLayout {...this.props}/>
+            </Tab>
+            <Tab
              // value={'1'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
                <div style={{overflow: 'none', backgroundColor: muiTheme.palette.canvasColor}} ref={(field) => { this.grid = field; }}>
-                 <ResponsiveReactGridLayout 
-                  isDraggable={browser.greaterThan.small}
-                  isResizable={browser.greaterThan.small}
-                  onLayoutChange={onLayoutChange}
-                  className="layout"
-                 // layouts={layouts}
-                 // autoSize={true}
-                  verticalCompact={false}
-                  rowHeight={70}
-                  breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
-                  cols={{lg: 18, md: 15, sm: 9, xs: 6, xxs: 3}}
-                  ref="grid"
-                  {...this.props}
-                 >
-                   {this.renderGrid(assets)}
-                  </ResponsiveReactGridLayout> 
               </div>
             </Tab>
             <Tab
             //  value={'2'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
-               <ReactGridLayout {...this.props}/>
             </Tab>
+
             <Tab
             //  value={'3'}
               icon={<FontIcon className="material-icons">list</FontIcon>}>
@@ -449,6 +211,14 @@ class CampaignPage extends Component {
               </FloatingActionButton>
           }
         </div>
+        <div style={{position: 'fixed', left: 18, zIndex:3, bottom: 18, }}>
+          {
+              isGranted('create_asset') &&
+              <FloatingActionButton  primary={true} onClick={createWidget} style={{zIndex:3}}>
+                <FontIcon className="material-icons" >add</FontIcon>
+              </FloatingActionButton>
+          }
+        </div>
     </Activity>
   );
 
@@ -464,6 +234,7 @@ CampaignPage.propTypes = {
   isGranted: PropTypes.func.isRequired,
   muiTheme: PropTypes.object.isRequired,
   widgets: PropTypes.array,
+  createWidget: PropTypes.funct,
   onLayoutChange: PropTypes.func.isRequired,
   reactGridLayout: PropTypes.object.isRequired,
  
