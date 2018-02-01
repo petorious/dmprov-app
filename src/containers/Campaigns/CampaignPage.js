@@ -96,7 +96,7 @@ class CampaignPage extends Component {
           layout
         })
     }
- ;
+ 
   }
 
   onLayoutChange = (layout) => {
@@ -110,22 +110,23 @@ class CampaignPage extends Component {
           }
     };
 
-  onSizeChangeExpand = (assets, key) => {
-    const { firebaseApp, match, simpleValues } = this.props;
+  onSizeChangeExpand = (asset, index) => {
+    const { firebaseApp, match, assets, simpleValues } = this.props;
+        const key= asset.key;
         const uid=match.params.uid;
-
-        return {
-          updated:firebaseApp.database().ref().child(`/assets/${key}/sizeClass/`).set('expanded')
+        console.log("asset key", asset.key)
+        // return {
+        //   updated:firebaseApp.database().ref().child(`/asset/${asset.key}/sizeClass/`).set('expanded')
         
-          }
+        //   }
       }
   
-  onSizeChangeShrink = (assets, key) => {
+  onSizeChangeShrink = (asset, key) => {
     const { firebaseApp, match, simpleValues } = this.props;
             const uid=match.params.uid;
 
         return{
-          updated:firebaseApp.database().ref().child(`/assets/${key}/sizeClass/`).set('standard')
+          updated:firebaseApp.database().ref().child(`/assets/${asset.key}/sizeClass/`).set('standard')
         }
 
       }
@@ -141,7 +142,7 @@ class CampaignPage extends Component {
     }
 
     return _.map(assets, (asset, index) => {
-
+``
       if(asset.val.sizeClass==='standard'){
         
         return <div key={index}
@@ -172,32 +173,17 @@ class CampaignPage extends Component {
                        targetOrigin={{horizontal: 'left', vertical: 'top'}}
                      >
                        
-
                        <MenuItem
-                         primaryText="Size"
-                         rightIcon={<ArrowDropRight />}
-                         menuItems={[
-                           <MenuItem primaryText="Standard" onClick={this.props.onSizeChangeShrink}/>,
-                           <MenuItem primaryText="Expanded" onClick={this.props.onSizeChangeExpand}/>,
-                           <MenuItem primaryText="Thumbnail" />,
-                         ]}
+                         primaryText="Expand"
+                         onClick={this.onSizeChangeExpand(assets[index])}
+                
                        />
-                       <MenuItem
-                         primaryText="View"
-                         rightIcon={<ArrowDropRight />}
-                         menuItems={[
-                           <MenuItem primaryText="Details" />,
-                           <MenuItem primaryText="Stats" />,
-                           <MenuItem primaryText="Images" />,
-                           <MenuItem primaryText="Tags" />,
-                           <MenuItem primaryText="Attachements" />,
-                         ]}
-                       />
+                       
                        <MenuItem
                          primaryText="Copy & Paste"
                          rightIcon={<ArrowDropRight />}
                          menuItems={[
-                           <MenuItem primaryText="Cut" />,
+                           <MenuItem primaryText="Cut"  />,
                            <MenuItem primaryText="Copy" />,
                            <Divider />,
                            <MenuItem primaryText="Paste" />,
@@ -248,25 +234,11 @@ class CampaignPage extends Component {
                        
 
                        <MenuItem
-                         primaryText="Size"
-                         rightIcon={<ArrowDropRight />}
-                         menuItems={[
-                           <MenuItem primaryText="Standard" onClick={this.props.onSizeChangeShrink}/>,
-                           <MenuItem primaryText="Expanded" onClick={this.props.onSizeChangeExpand}/>,
-                           <MenuItem primaryText="Thumbnail" />,
-                         ]}
+                         primaryText="Minimize"
+                         onClick={this.props.onSizeChangeShrink}
+                       
                        />
-                       <MenuItem
-                         primaryText="View"
-                         rightIcon={<ArrowDropRight />}
-                         menuItems={[
-                           <MenuItem primaryText="Details" />,
-                           <MenuItem primaryText="Stats" />,
-                           <MenuItem primaryText="Images" />,
-                           <MenuItem primaryText="Tags" />,
-                           <MenuItem primaryText="Attachements" />,
-                         ]}
-                       />
+                    
                        <MenuItem
                          primaryText="Copy & Paste"
                          rightIcon={<ArrowDropRight />}
@@ -286,6 +258,8 @@ class CampaignPage extends Component {
                      </IconMenu>
                  }
           />  
+          <Tabs>
+            <Tab label="D">
                   <div style={ { display: 'flex'} }>
                     <Paper style={ { display: 'inline-block', float: 'center',  margin: '8px 8px 8px 8px',} }>
                      <font color="grey">{asset.val.asset_description}
@@ -293,37 +267,28 @@ class CampaignPage extends Component {
                      </Paper>
                                        
                    </div>
+              </Tab>
+
+              <Tab label='T'>
+
+              </Tab>
+              <Tab label='A'>
+
+              </Tab>
+              <Tab label='S'>
+
+              </Tab>
+
+            
+          </Tabs>
                     
 
           
         </div>
 
-      if(asset.val.sizeClass==='thumbnail')
-        return <div key={index}
-            data-grid={asset.val.dataGrid}
-        >
+      
           
-          <ListItem
-
-            leftAvatar={
-              <Avatar
-                src={asset.val.photoURL}
-                alt="arc"
-                icon={
-                  <FontIcon className="material-icons">
-                    add_circle
-                  </FontIcon>
-                }
-              />
-            }
-            style={{overflow: 'none', backgroundColor: 'black', primaryTextColor: 'black'}}
-            key={index}
-            id={index}
-            primaryText={".     "}
-            secondaryText={"  ."}
-           />  
-           <Divider/>
-        </div>
+          
 
 
     });
@@ -353,7 +318,6 @@ class CampaignPage extends Component {
   renderList(assets) {
     const {history, currentCampaignUid, list} =this.props;
 
-  //const currentCampaignUid=key;
 
     if(assets===undefined){
       return <div></div>
