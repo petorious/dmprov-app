@@ -9,6 +9,7 @@ import locale from './locale/reducer';
 import grids from './grids/reducer';
 import theme from './theme/reducer';
 import assets from './grids/reducer';
+import widgets from './widgets/reducer';
 import firekitReducers from 'firekit';
 import { filterReducer } from 'material-ui-filter';
 
@@ -20,6 +21,7 @@ const reducers = combineReducers({
   persistentValues,
   simpleValues,
   grids,
+  widgets,
   assets,
   locale,
   theme,

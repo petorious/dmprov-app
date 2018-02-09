@@ -5,10 +5,8 @@ import PropTypes from 'prop-types';
 import { setSimpleValue } from '../../store/simpleValues/actions';
 import { setPersistentValue } from '../../store/persistentValues/actions';
 import {Responsive, WidthProvider, GridItem} from 'react-grid-layout';
-//react grid layout import 
-import TarikReactGridLayout from '../../containers/ReactGridLayout/TarikReactGridLayout';
-
 import { onLayoutChange } from '../../store/grids/actions';
+import Gridboard from '../../containers/Gridboard/Gridboard';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import { injectIntl } from 'react-intl';
 import { Activity } from '../../containers/Activity';
@@ -166,7 +164,8 @@ class CampaignPage extends Component {
             <Tab
             //  value={'2'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
-               <TarikReactGridLayout {...this.props}/>
+              <Gridboard        
+             />
             </Tab>
             <Tab
              // value={'1'}
@@ -236,7 +235,6 @@ CampaignPage.propTypes = {
   widgets: PropTypes.array,
   createWidget: PropTypes.funct,
   onLayoutChange: PropTypes.func.isRequired,
-  reactGridLayout: PropTypes.object.isRequired,
  
 };
 
