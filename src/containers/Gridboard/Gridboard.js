@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import {GridList, GridTile} from 'material-ui/GridList';
-import Subheader from 'material-ui/Subheader';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
+import { setPersistentValue } from '../../store/persistentValues/actions';
 import {Responsive, WidthProvider} from 'react-grid-layout';
 import { onLayoutChange } from '../../store/grids/actions';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import {withRouter} from 'react-router-dom';
 import { withFirebase } from 'firekit';
 import muiThemeable from 'material-ui/styles/muiThemeable';
@@ -44,15 +38,18 @@ class Gridboard extends Component{
   };
 
   componentWillMount(){
-    this.props.watchList('campaign_layouts');
+    //this.props.watchList('campaign_layouts');
+
+     
   }
   componentDidMount() {
     const { watchList, firebaseApp, auth, uid, path  }=this.props;
    
-    let layoutRef=firebaseApp.database().ref('campaign_layouts')
-    .limitToFirst(20);
-
-    watchList(layoutRef);
+    // let layoutRef=firebaseApp.database().ref('campaign_layouts')
+    //  .orderByKey()
+    //  .equalTo('-L0J5Fu99MIGYopf7XaB')
+    //  .limitToFirst(20);
+    //  watchList(layoutRef);
 
   }
 
@@ -65,25 +62,28 @@ class Gridboard extends Component{
 
 
 
-    const { browser, firebaseApp, campaign_layouts, uid, grids, gridboard, layoutRef, onLayoutChange} = this.props
+    const { browser, firebaseApp, currentCampaignUid, campaign_layouts, uid, grids, gridboard, layoutRef, onLayoutChange} = this.props
 
+ 
+   // let layout=[];
+   // if(campaign_layouts){
+   //  layout=campaign_layouts
 
+   //  this.props.campaign_layouts
 
-    var layoutStuff = this.props.campaign_layouts.map((campaign_layouts, i) => {
-          return {         
-            val: campaign_layouts.val, 
-            key: campaign_layouts.key}
-          
-        
+   //  .map(
+   //    (campaign_layout, index) => {
+   //      return{
+   //        val: campaign_layouts.val
+   //      }
+   //    })
+   // };
 
-    });
+   console.log("layout", layout)
 
-
-   let layout = layoutStuff
     
-
-    console.log("layout", layout)
-
+  
+  
     // const menuItems=[
     //   {  key: 'save',
     //     text:messages.save||'save',
@@ -136,13 +136,14 @@ class Gridboard extends Component{
     ];
 
 
-    // var layout = [
+    var layout = [
 
-    //   {i: '1', x: 0, y: 0, w: 4, h: 4.2,isResizable:false},
-    //   {i: '2', x: 0, y: 0, w: 3, h: 1},
-    //   {i: '3', x: 4, y: 0, w: 3, h: 1},
-    //   {i: '4', x: 4, y: 0, w: 3, h: 1}
-    // ];
+      {i: '1', x: 0, y: 0, w: 4, h: 4.2,isResizable:false},
+      {i: '2', x: 0, y: 0, w: 3, h: 1},
+      {i: '3', x: 4, y: 0, w: 3, h: 1},
+      {i: '4', x: 4, y: 0, w: 3, h: 1}
+    ];
+    // console.log('Model This', layoutModel)
 
     var layouts = Gridboard.layout?{lg:Gridboard.layout}:{lg:layout}
 
@@ -178,7 +179,7 @@ class Gridboard extends Component{
                 Donec mattis pretium massa. lacus id, pellentesque lobortis odio.
               </CardText>
               <CardActions>
-                <FlatButton label="Open" actAsExpander={true}/>
+                <FlatButton label="Open" />
                 <FlatButton label="Action2" />
               </CardActions>
             </Card>
@@ -245,23 +246,26 @@ class Gridboard extends Component{
 
 Gridboard.propTypes = {
   onLayoutChange: PropTypes.func.isRequired,
-  gridboard: PropTypes.object.isRequired,
+  gridboard: PropTypes.object,
   browser: PropTypes.object.isRequired,
-  campaign_layouts: PropTypes.array,
+  campaign_layouts: PropTypes.array.isRequired,
 }
 
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
 
-  const {browser, intl , lists, gridboard} = state;
+  const {browser, intl , lists, gridboard, uid, currentCampaignUid} = state;
+  const { match } = ownProps;
 
   const layoutsPath=`campaign_layouts/`;
+
   const campaign_layouts=lists[layoutsPath]?lists[layoutsPath]:[];
 
   return {
     gridboard: gridboard,
     browser: browser,
-    campaign_layouts: lists.campaign_layouts,
+    //this list imports into the redux logger
+    campaign_layouts: lists.campaign_layouts
 
   };
 
@@ -278,5 +282,5 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(
-  mapStateToProps, { onLayoutChange }
+  mapStateToProps, { setPersistentValue, onLayoutChange }
 )(injectIntl(muiThemeable()(withRouter(withFirebase(Gridboard)))));

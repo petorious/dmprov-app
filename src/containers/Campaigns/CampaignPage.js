@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setSimpleValue } from '../../store/simpleValues/actions';
 import { setPersistentValue } from '../../store/persistentValues/actions';
-import {Responsive, WidthProvider, GridItem} from 'react-grid-layout';
+import {Responsive, WidthProvider} from 'react-grid-layout';
 import { onLayoutChange } from '../../store/grids/actions';
 import Gridboard from '../../containers/Gridboard/Gridboard';
 import muiThemeable from 'material-ui/styles/muiThemeable';
@@ -18,7 +18,7 @@ import Avatar from 'material-ui/Avatar';
 import { withFirebase } from 'firekit';
 import { Tabs, Tab } from 'material-ui/Tabs'
 import Scrollbar from '../../components/Scrollbar/Scrollbar'
-import { filterSelectors, filterActions } from 'material-ui-filter'
+//import { filterSelectors, filterActions } from 'material-ui-filter'
 import isGranted  from '../../utils/auth';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
@@ -136,7 +136,6 @@ class CampaignPage extends Component {
             browser,
             assets,
             asset,
-            campaigns,
             index, 
             muiTheme, 
             createWidget,
@@ -213,7 +212,7 @@ class CampaignPage extends Component {
         <div style={{position: 'fixed', left: 18, zIndex:3, bottom: 18, }}>
           {
               isGranted('create_asset') &&
-              <FloatingActionButton  primary={true} onClick={createWidget} style={{zIndex:3}}>
+              <FloatingActionButton   onClick={createWidget} style={{zIndex:3}}>
                 <FontIcon className="material-icons" >add</FontIcon>
               </FloatingActionButton>
           }
@@ -227,13 +226,11 @@ class CampaignPage extends Component {
 
 CampaignPage.propTypes = {
   assets: PropTypes.array.isRequired,
-  campaigns: PropTypes.string,
   history: PropTypes.object,
   auth: PropTypes.object.isRequired,
   isGranted: PropTypes.func.isRequired,
   muiTheme: PropTypes.object.isRequired,
   widgets: PropTypes.array,
-  createWidget: PropTypes.funct,
   onLayoutChange: PropTypes.func.isRequired,
  
 };
