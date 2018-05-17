@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "chart.js": "^2.7.0",
-    "firebase": "^4.4.0",
+    "firebase": "^4.13.1",
     "firebaseui": "^2.3.0",
     "firekit": "^0.1.24",
     "github-markdown-css": "^2.8.0",
