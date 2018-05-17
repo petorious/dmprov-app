@@ -4,11 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setSimpleValue } from '../../store/simpleValues/actions';
 import { setPersistentValue } from '../../store/persistentValues/actions';
-import {Responsive, WidthProvider, GridItem} from 'react-grid-layout';
-//react grid layout import 
-import TarikReactGridLayout from '../../containers/ReactGridLayout/TarikReactGridLayout';
-
+import {Responsive, WidthProvider} from 'react-grid-layout';
 import { onLayoutChange } from '../../store/grids/actions';
+import Gridboard from '../../containers/Gridboard/Gridboard';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import { injectIntl } from 'react-intl';
 import { Activity } from '../../containers/Activity';
@@ -20,7 +18,7 @@ import Avatar from 'material-ui/Avatar';
 import { withFirebase } from 'firekit';
 import { Tabs, Tab } from 'material-ui/Tabs'
 import Scrollbar from '../../components/Scrollbar/Scrollbar'
-import { filterSelectors, filterActions } from 'material-ui-filter'
+//import { filterSelectors, filterActions } from 'material-ui-filter'
 import isGranted  from '../../utils/auth';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
@@ -128,7 +126,43 @@ class CampaignPage extends Component {
       </div>
     });
   }
+  renderAssets(assets) {
+    const {history, currentCampaignUid, list} =this.props;
 
+
+    if(assets===undefined){
+      return <div></div>
+    }
+
+    return _.map(assets, (asset, index) => {
+
+      return <div key={index}
+      >
+        <ListItem
+          onClick={()=>{history.push(`/assets/edit/${asset.key}`)}}
+          leftAvatar={
+            <Avatar
+              src={asset.val.photoURL}
+              alt="arc"
+              icon={
+                <FontIcon className="material-icons">
+                  add_circle
+                </FontIcon>
+              }
+            />
+          }
+          key={index}
+          primaryText={asset.val.asset_name}
+          secondaryText={asset.val.asset_slug}
+          id={index}
+        />
+         
+        <Divider inset={true}/>
+      </div>
+    });
+  }
+
+ 
 
 
   render(){
@@ -138,12 +172,13 @@ class CampaignPage extends Component {
             browser,
             assets,
             asset,
-            campaigns,
             index, 
             muiTheme, 
             createWidget,
             history, 
-            isGranted, 
+            isGranted,
+            layouts,
+            layout, 
             campaignPageName, 
             currentCampaignUid, 
             reactGridLayout,
@@ -166,7 +201,9 @@ class CampaignPage extends Component {
             <Tab
             //  value={'2'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
-               <TarikReactGridLayout {...this.props}/>
+              <Gridboard>
+                    {this.props}
+             </Gridboard>
             </Tab>
             <Tab
              // value={'1'}
@@ -214,7 +251,7 @@ class CampaignPage extends Component {
         <div style={{position: 'fixed', left: 18, zIndex:3, bottom: 18, }}>
           {
               isGranted('create_asset') &&
-              <FloatingActionButton  primary={true} onClick={createWidget} style={{zIndex:3}}>
+              <FloatingActionButton   onClick={createWidget} style={{zIndex:3}}>
                 <FontIcon className="material-icons" >add</FontIcon>
               </FloatingActionButton>
           }
@@ -228,15 +265,13 @@ class CampaignPage extends Component {
 
 CampaignPage.propTypes = {
   assets: PropTypes.array.isRequired,
-  campaigns: PropTypes.string,
+  layouts: PropTypes.array,
   history: PropTypes.object,
   auth: PropTypes.object.isRequired,
   isGranted: PropTypes.func.isRequired,
   muiTheme: PropTypes.object.isRequired,
   widgets: PropTypes.array,
-  createWidget: PropTypes.funct,
   onLayoutChange: PropTypes.func.isRequired,
-  reactGridLayout: PropTypes.object.isRequired,
  
 };
 

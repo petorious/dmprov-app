@@ -132,7 +132,7 @@ class ChatMessages extends Component {
 
     return messages.map((row, i) => {
       const values=row.val
-      const key=row.key
+     // const key=row.key
 
       if (values.created == null) {
         return undefined
