@@ -126,7 +126,43 @@ class CampaignPage extends Component {
       </div>
     });
   }
+  renderAssets(assets) {
+    const {history, currentCampaignUid, list} =this.props;
 
+
+    if(assets===undefined){
+      return <div></div>
+    }
+
+    return _.map(assets, (asset, index) => {
+
+      return <div key={index}
+      >
+        <ListItem
+          onClick={()=>{history.push(`/assets/edit/${asset.key}`)}}
+          leftAvatar={
+            <Avatar
+              src={asset.val.photoURL}
+              alt="arc"
+              icon={
+                <FontIcon className="material-icons">
+                  add_circle
+                </FontIcon>
+              }
+            />
+          }
+          key={index}
+          primaryText={asset.val.asset_name}
+          secondaryText={asset.val.asset_slug}
+          id={index}
+        />
+         
+        <Divider inset={true}/>
+      </div>
+    });
+  }
+
+ 
 
 
   render(){
@@ -140,7 +176,9 @@ class CampaignPage extends Component {
             muiTheme, 
             createWidget,
             history, 
-            isGranted, 
+            isGranted,
+            layouts,
+            layout, 
             campaignPageName, 
             currentCampaignUid, 
             reactGridLayout,
@@ -163,8 +201,9 @@ class CampaignPage extends Component {
             <Tab
             //  value={'2'}
               icon={<FontIcon className="material-icons">tab</FontIcon>}>
-              <Gridboard        
-             />
+              <Gridboard>
+                    {this.props}
+             </Gridboard>
             </Tab>
             <Tab
              // value={'1'}
@@ -226,6 +265,7 @@ class CampaignPage extends Component {
 
 CampaignPage.propTypes = {
   assets: PropTypes.array.isRequired,
+  layouts: PropTypes.array,
   history: PropTypes.object,
   auth: PropTypes.object.isRequired,
   isGranted: PropTypes.func.isRequired,

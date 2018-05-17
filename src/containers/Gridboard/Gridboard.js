@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {Card, CardActions, CardHeader, CardTitle, CardText} from 'material-ui/Card';
 import { setPersistentValue } from '../../store/persistentValues/actions';
@@ -8,6 +9,7 @@ import { onLayoutChange } from '../../store/grids/actions';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import {withRouter} from 'react-router-dom';
+import {List, ListItem } from 'material-ui/List';
 import { withFirebase } from 'firekit';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import { injectIntl } from 'react-intl';
@@ -19,6 +21,10 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
+  },
+  card:{
+     backgroundColor: "black",
+     color: 'muiTheme.palette.primaryColor',
   },
   gridList: {
     width: 500,
@@ -38,52 +44,102 @@ class Gridboard extends Component{
   };
 
   componentWillMount(){
-    //this.props.watchList('campaign_layouts');
 
      
   }
   componentDidMount() {
-    const { watchList, firebaseApp, auth, uid, path  }=this.props;
+    const { watchList, firebaseApp, styles, auth, uid, path  }=this.props;
    
-    // let layoutRef=firebaseApp.database().ref('campaign_layouts')
-    //  .orderByKey()
-    //  .equalTo('-L0J5Fu99MIGYopf7XaB')
-    //  .limitToFirst(20);
-    //  watchList(layoutRef);
+    let layoutRef=firebaseApp.database().ref('campaign_layouts')
+    .orderByChild('currentCampaignUid')
+    .equalTo("-KvecdzKQJ6qlr6U79Xc")
+     // .limitToFirst(20);
+     watchList(layoutRef);
+
+    let assetRef=firebaseApp.database().ref('assets')
+    .orderByChild('layoutUid')
+    .equalTo("-L0J5Fu99MIGYopf7X78")
+
+    watchList(assetRef);
+
 
   }
 
+   renderGridList(assets) {
+    const {history, currentCampaignUid, list, match} =this.props;
+    const uid=match.params.uid;
 
-  render( ){
+
+    if(assets===undefined){
+      return <div></div>
+    }
+
+    return 
+
+ 
+    _.map(assets, (val, i) => {
+
+      return <div key={val.key}
+      >
+        <ListItem
+          key={val.key}
+          primaryText={val.asset_name}
+          secondaryText={val.asset_slug}
+          id={val.key}
+        />
+         
+      </div>
+    });
+  }
+
+
+  render( i, keys){
 
     function handleLayoutChange(layout){
       layoutToSave=layout;
     };
 
-
-
-    const { browser, firebaseApp, currentCampaignUid, campaign_layouts, uid, grids, gridboard, layoutRef, onLayoutChange} = this.props
-
+    const { browser, firebaseApp,  muiTheme, currentCampaignUid, campaign_layouts, assets, match, grids, gridboard, layoutRef, onLayoutChange} = this.props
  
-   // let layout=[];
-   // if(campaign_layouts){
-   //  layout=campaign_layouts
+    const uid=match.params.uid;
 
-   //  this.props.campaign_layouts
+    let assetSource=[];
 
-   //  .map(
-   //    (campaign_layout, index) => {
-   //      return{
-   //        val: campaign_layouts.val
-   //      }
-   //    })
-   // };
+    if(assets){
+      assetSource=assets
+      //   .filter(asset=>{
+      //   console.log("asset authorUid ", asset.val.authorUid)
+      //   return asset.val.authorUid===uid
+      // })
+        .map(asset=>{
+        console.log('filtered asset', asset)
+        return {
+          id: asset.key,
+          key: asset.val.key,
+          name: asset.val.asset_name,
+          title: asset.val.title,
+          description: asset.val.description}
+      })
+    };   
 
-   console.log("layout", layout)
 
-    
-  
-  
+
+   let layout=[];
+   if(campaign_layouts){
+    layout=campaign_layouts
+
+    this.props.campaign_layouts
+    .filter(campaign_layout=>{
+            layout=campaign_layout.val.layout1
+          })
+    // .map(
+    //   (campaign_layout, index) => {
+    //     return{
+    //       val: campaign_layout.val.layout1
+    //     }
+    //   })
+   };
+   
     // const menuItems=[
     //   {  key: 'save',
     //     text:messages.save||'save',
@@ -97,7 +153,7 @@ class Gridboard extends Component{
 
     // ];
 
-    const tilesData = [
+    const widgetData = [
       {
         img: 'static/vegetables-790022_640.jpg',
         title: 'Breakfast',
@@ -107,21 +163,6 @@ class Gridboard extends Component{
         img: 'static/burger-827309_640.jpg',
         title: 'Tasty burger',
         author: 'pashminu',
-      },
-      {
-        img: 'static/camera-813814_640.jpg',
-        title: 'Camera',
-        author: 'Danson67',
-      },
-      {
-        img: 'static/morning-819362_640.jpg',
-        title: 'Morning',
-        author: 'fancycrave1',
-      },
-      {
-        img: 'static/hats-829509_640.jpg',
-        title: 'Hats',
-        author: 'Hans',
       },
       {
         img: 'static/honey-823614_640.jpg',
@@ -136,107 +177,40 @@ class Gridboard extends Component{
     ];
 
 
-    var layout = [
-
-      {i: '1', x: 0, y: 0, w: 4, h: 4.2,isResizable:false},
-      {i: '2', x: 0, y: 0, w: 3, h: 1},
-      {i: '3', x: 4, y: 0, w: 3, h: 1},
-      {i: '4', x: 4, y: 0, w: 3, h: 1}
-    ];
-    // console.log('Model This', layoutModel)
-
     var layouts = Gridboard.layout?{lg:Gridboard.layout}:{lg:layout}
 
+    return ( 
 
-    return (     
       <div>
+
         <ResponsiveReactGridLayout
 
             isDraggable={browser.greaterThan.medium}
             isResizable={browser.greaterThan.medium}
             onLayoutChange={handleLayoutChange}
             className="layout"
+            rowHeight={60}
+            verticalCompact={false}
             layouts={layouts}
+            style={styles}
             autoSize={true}
             breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
-            cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
-            ref={(field) => { this.grid = field; }}
+            cols={{lg: 24, md: 20, sm: 12, xs: 8, xxs: 4}}
+            ref={(field) => { this.list = field; }}
             >
-            <Card  key={"1"}>
-              <CardHeader
-                title="URL Avatar"
-                subtitle="Semesnica"
-                avatar={
-            
-                <FontIcon className="material-icons">
-                  add_circle
-                </FontIcon>}
-                />
-              
-              <CardTitle title="Semesnica" subtitle=" in Bosnia and Herzegovina" />
-              <CardText expandable={true}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions>
-                <FlatButton label="Open" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
-            <Card key={"3"}>
-              <CardHeader
-                title="Without Avatar"
-                subtitle="Subtitle"
-                actAsExpander={true}
-                showExpandableButton={true}
-                />
-              <CardText expandable={true}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa.lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions expandable={true}>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
-            <Card key={"2"}>
-              <CardHeader
-                title="Without Avatar"
-                subtitle="Subtitle"
-                actAsExpander={true}
-                showExpandableButton={true}
-                />
-              <CardText expandable={true}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. acus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions expandable={true}>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
-          
-            <Card key={"4"}>
-              <CardHeader
-                title="Without Avatar"
-                subtitle="Subtitle"
-                actAsExpander={true}
-                showExpandableButton={true}
-                />
-              <CardText expandable={true}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-              </CardText>
-              <CardActions expandable={true}>
-                <FlatButton label="Action1" />
-                <FlatButton label="Action2" />
-              </CardActions>
-            </Card>
+             {assetSource.map((val, index) => {
+                     return (
 
-
+                        <Card key={val.id} uid={match.params.uid}>
+                        {this.renderGridList(assets)}
+                        </Card>
+                       
+                      )
+                     }
+                   )}
+                 
           </ResponsiveReactGridLayout>
+          
         </div>
 
     );
@@ -249,15 +223,16 @@ Gridboard.propTypes = {
   gridboard: PropTypes.object,
   browser: PropTypes.object.isRequired,
   campaign_layouts: PropTypes.array.isRequired,
+  assets: PropTypes.array.isRequired,
 }
 
 
 function mapStateToProps(state, ownProps) {
 
-  const {browser, intl , lists, gridboard, uid, currentCampaignUid} = state;
+  const {browser, intl , lists, gridboard, uid, key, currentCampaignUid} = state;
   const { match } = ownProps;
 
-  const layoutsPath=`campaign_layouts/`;
+  const layoutsPath=`campaign_layouts/${uid}/`;
 
   const campaign_layouts=lists[layoutsPath]?lists[layoutsPath]:[];
 
@@ -265,7 +240,8 @@ function mapStateToProps(state, ownProps) {
     gridboard: gridboard,
     browser: browser,
     //this list imports into the redux logger
-    campaign_layouts: lists.campaign_layouts
+    campaign_layouts: lists.campaign_layouts,
+    assets: lists.assets,
 
   };
 
